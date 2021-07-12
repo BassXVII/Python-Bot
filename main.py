@@ -76,10 +76,12 @@ async def on_message(message):
         for idx in range(indx3 + len(carrot1), indx4):
           usr = usr + Usr[idx]
 
+        User = bot.get_user(usr)
+      
 
-       print("Extracted Data " + res + " requested By " + usr)
+       print("Extracted Data " + res + " requested By " + str(User))
        with open("SongsFile.txt", "a+") as f:
-        f.write(res + " Requested by: " + usr + "\n")
+        f.write(res + " Requested by: " + str(User) + "\n")
 
      
 
