@@ -7,6 +7,7 @@ from discord.ext import commands
 import random
 
 
+
 #bot = discord.bot()
 bot = commands.Bot(command_prefix = '.')
 
@@ -30,8 +31,6 @@ async def on_ready():
  
 @bot.event
 async def on_message(message):
-
-    
     if message.content.startswith("Purge"):
         if str(message.channel) == "bot" and message.content != "":
           await message.channel.purge(limit=30)
@@ -65,9 +64,22 @@ async def on_message(message):
        for idx in range(indx1 + len(Bracket1), indx2):
         res = res + Des[idx]
 
-       print("Extracted Data " + res)
+        #Getting substring from User
+
+        Usr = embed.description
+        carrot1 = "<"
+        carrot2 = ">"
+        indx3 = Usr.index(carrot1)
+        indx4 = Usr.index(carrot2)
+        usr = ' '
+
+        for idx in range(indx3 + len(carrot1), indx4):
+          usr = usr + Usr[idx]
+
+
+       print("Extracted Data " + res + " requested By " + usr)
        with open("SongsFile.txt", "a+") as f:
-        f.write(res + "\n")
+        f.write(res + " Requested by: " + usr + "\n")
 
      
 
@@ -119,8 +131,6 @@ async def add(ctx, args):
       if len(data) > 0 :
         f.write(str(args))
         f.write("\n")
-
-    print("message recieved")
     
 
 @bot.command()
@@ -130,7 +140,7 @@ async def playList(ctx):
  # await ctx.send(content)
 
   embed: discord.Embed = discord.Embed(
-        title="Public Play List", description= content,
+        title="Public Play List", description = content,
         color=0xF1C40F)
  
   await ctx.channel.send(embed=embed)
