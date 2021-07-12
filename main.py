@@ -65,7 +65,6 @@ async def on_message(message):
         res = res + Des[idx]
 
         #Getting substring from User
-
         Usr = embed.description
         carrot1 = "<"
         carrot2 = ">"
@@ -73,15 +72,14 @@ async def on_message(message):
         indx4 = Usr.index(carrot2)
         usr = ' '
 
+        #gets the user name from the description field
         for idx in range(indx3 + len(carrot1), indx4):
           usr = usr + Usr[idx]
-
-        User = bot.get_user(usr)
       
 
-       print("Extracted Data " + res + " requested By " + str(User))
+       print("Extracted Data " + res + " requested By " + str(usr))
        with open("SongsFile.txt", "a+") as f:
-        f.write(res + " Requested by: " + str(User) + "\n")
+        f.write(res + " Requested by: " + str(usr) + "\n")
 
      
 
