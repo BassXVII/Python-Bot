@@ -1,0 +1,3 @@
+get song from embed Description to add to playlist. [Songs Played]
+Add song suggestions to Songs file.
+Add user who requested song to song played list and time stamp. \
