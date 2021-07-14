@@ -2,6 +2,7 @@ from keep_alive import keep_alive
 import discord
 import os
 import logging
+import time
 from discord.ext import commands
 #from discord.ext.commands import Bot
 import random
@@ -22,6 +23,14 @@ logger.addHandler(handler)
 
 testWords = [ "Fuck", "shit", "Damn", "Ass", "cunt", "bitch"]
 responses = [ "Thats not nice. Im dissapointed in you.", "Get that dirty language outta here", "Do you kiss your momma with that mouth?"]
+
+def test(usr):
+    if usr == 819659006268276796:
+      usr = "Pickle"
+      print("HOmie")
+    else:
+      usr = "Hmoie"
+      print("TESTTT")
 
 
 @bot.event
@@ -72,18 +81,38 @@ async def on_message(message):
         indx4 = Usr.index(carrot2)
         usr = ' '
 
+        user1 = message.author
+      
+
+
         #gets the user name from the description field
         for idx in range(indx3 + len(carrot1), indx4):
           usr = usr + Usr[idx]
-      
-
+          
+          
+    
+        
        print("Extracted Data " + res + " requested By " + str(usr))
        with open("SongsFile.txt", "a+") as f:
-        f.write(res + " Requested by: " + str(usr) + "\n")
+         
+        f.write(res + " Requested by: " + str(user1) + "\n")
 
      
 
-    
+    #def getUserFromMention(mention):
+	#if (!mention):
+     #return;
+
+	#if (mention.startsWith('<@') && mention.endsWith('>')) {
+		#mention = mention.slice(2, -1);
+
+		#if (mention.startsWith('!')) {
+		#	mention = mention.slice(1);
+		#}
+
+	#	return client.users.cache.get(mention);
+	#}
+#}
 
 
     #Message based on a random word
@@ -122,7 +151,8 @@ async def on_message(message):
 
 @bot.command()
 async def add(ctx, args):
-    
+    user = ctx.message.author
+    print(user)
     await ctx.channel.send("Snakey added " + args + " to the playlist!")
 
     with open("SongsFile.txt", "a+") as f:
