@@ -24,13 +24,12 @@ logger.addHandler(handler)
 testWords = [ "Fuck", "shit", "Damn", "Ass", "cunt", "bitch"]
 responses = [ "Thats not nice. Im dissapointed in you.", "Get that dirty language outta here", "Do you kiss your momma with that mouth?"]
 
-def test(usr):
-    if usr == 819659006268276796:
-      usr = "Pickle"
-      print("HOmie")
-    else:
-      usr = "Hmoie"
-      print("TESTTT")
+
+def get_userId(ctx):
+    id = "376963178447372299"
+    user_name = bot.get_user(id)
+    print("User ID is: " + str(user_name))
+
 
 
 @bot.event
@@ -81,21 +80,18 @@ async def on_message(message):
         indx4 = Usr.index(carrot2)
         usr = ' '
 
-        user1 = message.author
-      
-
 
         #gets the user name from the description field
         for idx in range(indx3 + len(carrot1), indx4):
           usr = usr + Usr[idx]
           
           
-    
+       get_userId(usr)
         
        print("Extracted Data " + res + " requested By " + str(usr))
        with open("SongsFile.txt", "a+") as f:
          
-        f.write(res + " Requested by: " + str(user1) + "\n")
+        f.write(res + " Requested by: " + str(usr) + "\n")
 
      
 
