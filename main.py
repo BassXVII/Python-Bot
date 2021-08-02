@@ -6,11 +6,13 @@ import time
 from discord.ext import commands
 #from discord.ext.commands import Bot
 import random
+intents = discord.Intents.default()
+intents.members = True
 
 
 
 #bot = discord.bot()
-bot = commands.Bot(command_prefix = '.')
+bot = commands.Bot(command_prefix = '.', intents = intents)
 counter = 0
 user1 = 234395307759108106
 
@@ -148,6 +150,13 @@ async def on_message(message):
             await  message.channel.send("Your gayer than james charles. Quit it.")
     await bot.process_commands(message)
 
+
+
+@bot.command()  # pass_context is not necesary since more than few versions back
+async def test(ctx): 
+  user_id = 234395307759108106 # renamed id to user_id to make it more readable
+  user = bot.get_user(user_id)
+  print(user)
 
 
 @bot.command()
