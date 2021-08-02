@@ -11,7 +11,8 @@ import random
 
 #bot = discord.bot()
 bot = commands.Bot(command_prefix = '.')
-
+counter = 0
+user1 = 234395307759108106
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
@@ -25,10 +26,12 @@ testWords = [ "Fuck", "shit", "Damn", "Ass", "cunt", "bitch"]
 responses = [ "Thats not nice. Im dissapointed in you.", "Get that dirty language outta here", "Do you kiss your momma with that mouth?"]
 
 
-def get_userId(ctx):
-    id = "376963178447372299"
-    user_name = bot.get_user(id)
-    print("User ID is: " + str(user_name))
+async def get_userId(user1):
+
+ print('Finding user.')
+ print("user is " + user1)
+ user2 = bot.fetch_user(user1)
+ print("User ID is: " + str(user2))
 
 
 
@@ -79,7 +82,7 @@ async def on_message(message):
         indx3 = Usr.index(carrot1)
         indx4 = Usr.index(carrot2)
         usr = ' '
-
+        
 
         #gets the user name from the description field
         for idx in range(indx3 + len(carrot1), indx4):
@@ -87,8 +90,10 @@ async def on_message(message):
           
           
        get_userId(usr)
-        
-       print("Extracted Data " + res + " requested By " + str(usr))
+       #Get username from mention
+       #member1 = message.mentions[0].id
+
+       #print("Extracted Data " + res + " requested By " + str(member1))
        with open("SongsFile.txt", "a+") as f:
          
         f.write(res + " Requested by: " + str(usr) + "\n")
@@ -158,6 +163,9 @@ async def add(ctx, args):
         f.write(str(args))
         f.write("\n")
     
+@bot.command()
+async def ping(ctx, member):
+    await ctx.send(f"Pinging, {ctx.author.mention}")
 
 @bot.command()
 async def playList(ctx):
