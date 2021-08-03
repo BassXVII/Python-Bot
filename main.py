@@ -63,9 +63,9 @@ async def on_message(message):
     if(message.author.id == 234395307759108106): 
       embeds = message.embeds # return list of embeds
       for embed in embeds:
-       print(embed.to_dict()) # it's content of embed in dict
+       #print(embed.to_dict()) # it's content of embed in dict
        Des = embed.description 
-      #Getting substring from description
+       #Getting substring from description
        Bracket1 = "["
        Bracket2 = "]"
 
@@ -92,11 +92,10 @@ async def on_message(message):
        user_id = int(usr)   
        await get_userID(user_id)
        
-
        print("Extracted Data " + res + " requested By " + str(user))
        with open("SongsFile.txt", "a+") as f:
-         
         f.write(res + " Requested by: " + str(user) + "\n")
+
 
     #Message based on a random word
     if any(word in message.content for word in testWords):
@@ -108,9 +107,8 @@ async def on_message(message):
 
 
     #Help info
-
     if message.content.startswith("!halp"):
-        await message.channel.send("Current commands: \n1.Gey\n2.Purge\n3. .add\n4. .playList")
+        await message.channel.send("Current commands: \n1.Gey\n2.Purge\n3. .add\n4. .playList\n 5. SuggestedList")
 
     #Tell user how gay they are.
     randInt = random.randint(1,100)
@@ -148,20 +146,28 @@ async def add(ctx, * , args):
         f.write("\n")
     
 
-
-
 @bot.command()
 async def ping(ctx, member):
     await ctx.send(f"Pinging, {ctx.author.mention}")
 
+
+#commands to get embedded lists of song lists
 @bot.command()
 async def playList(ctx):
   file = open("SongsFile.txt")
   content = file.read()
- # await ctx.send(content)
-
   embed: discord.Embed = discord.Embed(
         title="Public Play List", description = content,
+        color=0xF1C40F)
+  await ctx.channel.send(embed=embed)
+
+
+@bot.command()
+async def SuggestedList(ctx):
+  file = open("Suggested.txt")
+  content = file.read()
+  embed: discord.Embed = discord.Embed(
+        title="Suggested songs to play", description = content,
         color=0xF1C40F)
   await ctx.channel.send(embed=embed)
   
