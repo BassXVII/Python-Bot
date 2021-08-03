@@ -1,0 +1,6 @@
+#Get username from mention
+       #member1 = message.mentions[0].id
+
+       #print("Extracted Data " + res + " requested By " + str(member1))
+
+       SOng

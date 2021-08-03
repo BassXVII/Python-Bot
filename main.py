@@ -14,7 +14,7 @@ intents.members = True
 #bot = discord.bot()
 bot = commands.Bot(command_prefix = '.', intents = intents)
 
-user1 = 234395307759108106
+
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
@@ -28,6 +28,10 @@ testWords = [ "Fuck", "shit", "Damn", "Ass", "cunt", "bitch"]
 responses = [ "Thats not nice. Im dissapointed in you.", "Get that dirty language outta here", "Do you kiss your momma with that mouth?"]
 
 
+Lonely = ["Where are the boys","where are the boys", "Whos on", "whos on", "where is everybody", "Where is everybody", "where tha boys at", "Where tha hoes at", "where my hoes at", "where tha hoes at", "where the hoes at", "anyone on"]
+
+HereIAm = ["Well, it looks like no one is on at the moment, but im here. ", "Looks liek it's just you bud, but im here! Not that i can do much", "No one likes you.", "Well, I'd keep you company, but it seems as if im programmed with only a limited number of responses to a limited number of questions. So that's not much help,is it.", "IDK, you have a lot of fake friends, huh. "]
+
 
 @bot.event
 async def on_ready():
@@ -37,8 +41,11 @@ async def on_ready():
 
 async def get_userID(user_id): 
    # renamed id to user_id to make it more readable
-  user = bot.get_user(user_id)
-  print(user)
+ global user 
+ user= bot.get_user(user_id)
+ print(user)
+ return (user)
+  
  
 @bot.event
 async def on_message(message):
@@ -47,12 +54,6 @@ async def on_message(message):
           await message.channel.purge(limit=30)
           await message.channel.send("Snakey cleared away 30 messages")
 
-
-    #if message.author == bot.author:
-      #await message.channel.send(message.author.id)
-      #print(message.author.id)
-      #return
-    
     #Message to see if bot is up
     if message.content.startswith('.Ping'):
         await message.channel.send('Pong!')
@@ -88,40 +89,22 @@ async def on_message(message):
         for idx in range(indx3 + len(carrot1), indx4):
           usr = usr + Usr[idx]
         
-          
-          
        user_id = int(usr)   
        await get_userID(user_id)
-       #Get username from mention
-       #member1 = message.mentions[0].id
+       
 
-       #print("Extracted Data " + res + " requested By " + str(member1))
+       print("Extracted Data " + res + " requested By " + str(user))
        with open("SongsFile.txt", "a+") as f:
          
-        f.write(res + " Requested by: " + str(usr) + "\n")
-
-     
-
-    #def getUserFromMention(mention):
-	#if (!mention):
-     #return;
-
-	#if (mention.startsWith('<@') && mention.endsWith('>')) {
-		#mention = mention.slice(2, -1);
-
-		#if (mention.startsWith('!')) {
-		#	mention = mention.slice(1);
-		#}
-
-	#	return client.users.cache.get(mention);
-	#}
-#}
-
+        f.write(res + " Requested by: " + str(user) + "\n")
 
     #Message based on a random word
     if any(word in message.content for word in testWords):
         await message.channel.purge(limit=1)
         await message.channel.send(random.choice(responses))
+
+    if any(word in message.content for word in Lonely):
+        await message.channel.send(random.choice(HereIAm))
 
 
     #Help info
@@ -151,23 +134,22 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
-
-
-
-
+ 
 @bot.command()
-async def add(ctx, args):
-    user = ctx.message.author
-    print(user)
-    await ctx.channel.send("Snakey added " + args + " to the playlist!")
+async def add(ctx, * , args):
+    msg_author = ctx.message.author
+    await ctx.channel.send("Snakey added " + args + " to the suggested songs list :)")
 
-    with open("SongsFile.txt", "a+") as f:
+    with open("Suggested.txt", "a+") as f:
       f.seek(0)
       data = f.read(100)
       if len(data) > 0 :
-        f.write(str(args))
+        f.write(str(args) + "- Suggested by: " + str(msg_author))
         f.write("\n")
     
+
+
+
 @bot.command()
 async def ping(ctx, member):
     await ctx.send(f"Pinging, {ctx.author.mention}")
@@ -181,7 +163,6 @@ async def playList(ctx):
   embed: discord.Embed = discord.Embed(
         title="Public Play List", description = content,
         color=0xF1C40F)
- 
   await ctx.channel.send(embed=embed)
   
 
