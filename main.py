@@ -3,14 +3,12 @@ import discord
 import os
 import logging
 import time
+import datetime
+from datetime import date 
 from discord.ext import commands
-import requests
-from bs4 import BeautifulSoup
 import random
 intents = discord.Intents.default()
 intents.members = True
-
-
 
 #bot = discord.bot()
 bot = commands.Bot(command_prefix = '.', intents = intents)
@@ -50,6 +48,7 @@ async def get_userID(user_id):
  
 @bot.event
 async def on_message(message):
+  try:
     if message.content.startswith("Purge"):
         if str(message.channel) == "bot" and message.content != "":
           await message.channel.purge(limit=30)
@@ -58,13 +57,14 @@ async def on_message(message):
     #Message to see if bot is up
     if message.content.startswith('.Ping'):
         await message.channel.send('Pong!')
+
       
 
     
     if(message.author.id == 234395307759108106): 
       embeds = message.embeds # return list of embeds
       for embed in embeds:
-       #print(embed.to_dict()) # it's content of embed in dict
+       print(embed.to_dict()) # it's content of embed in dict
        Des = embed.description 
        #Getting substring from description
        Bracket1 = "["
@@ -93,10 +93,12 @@ async def on_message(message):
        user_id = int(usr)   
        await get_userID(user_id)
        
-       print("Extracted Data " + res + " requested By " + str(user))
-       with open("SongsFile.txt", "a+") as f:
-        f.write(res + " Requested by: " + str(user) + "\n")
-
+      #get current time
+      e = datetime.datetime.now()
+      date_now = ("%s/%s/%s" % (e.day, e.month, e.year))
+      print("Extracted Data " + res + " requested By " + str(user))
+      with open("SongsFile.txt", "a+") as f:
+        f.write(str(date_now) + ": "+ res + " Requested by: " + str(user) + "\n")
 
     #Message based on a random word
     if any(word in message.content for word in testWords):
@@ -112,6 +114,7 @@ async def on_message(message):
         await message.channel.send("Current commands: \n1.Gey\n2.Purge\n3. .add\n4. .playList\n 5. SuggestedList")
 
     #Tell user how gay they are.
+    #make a command for this later
     randInt = random.randint(1,100)
     if message.content.startswith("gey"):
         await message.channel.send(f"{message.author} is {randInt} percent gay")
@@ -133,17 +136,29 @@ async def on_message(message):
     await bot.process_commands(message)
 
 
+  except UnboundLocalError as error:
+        # Output expected UnboundLocalErrors.
+        logger.error(error)
+
  
 @bot.command()
 async def add(ctx, * , args):
     msg_author = ctx.message.author
+    e = datetime.datetime.now()
+    date_now = ("%s/%s/%s" % (e.day, e.month, e.year))
+
     await ctx.channel.send("Snakey added " + args + " to the suggested songs list :)")
+
+    
+
 
     with open("Suggested.txt", "a+") as f:
       f.seek(0)
       data = f.read(100)
       if len(data) > 0 :
-        f.write(str(args) + "- Suggested by: " + str(msg_author))
+        f.write(str(date_now) + ", " + str(args) + ", added by: " + str(msg_author))
+        f.write("\n")
+        f.write("¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯")
         f.write("\n")
     
 
@@ -171,9 +186,7 @@ async def SuggestedList(ctx):
         title="Suggested songs to play", description = content,
         color=0xF1C40F)
   await ctx.channel.send(embed=embed)
+   
   
-
-
-
 keep_alive()
 bot.run(os.getenv('TOKEN'))
