@@ -13,7 +13,7 @@ intents.members = True
 
 #bot = discord.bot()
 bot = commands.Bot(command_prefix = '.', intents = intents)
-counter = 0
+
 user1 = 234395307759108106
 
 logger = logging.getLogger('discord')
@@ -28,19 +28,17 @@ testWords = [ "Fuck", "shit", "Damn", "Ass", "cunt", "bitch"]
 responses = [ "Thats not nice. Im dissapointed in you.", "Get that dirty language outta here", "Do you kiss your momma with that mouth?"]
 
 
-async def get_userId(user1):
-
- print('Finding user.')
- print("user is " + user1)
- user2 = bot.fetch_user(user1)
- print("User ID is: " + str(user2))
-
-
 
 @bot.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(bot))
+# pass_context is not necesary since more than few versions back
 
+
+async def get_userID(user_id): 
+   # renamed id to user_id to make it more readable
+  user = bot.get_user(user_id)
+  print(user)
  
 @bot.event
 async def on_message(message):
@@ -79,7 +77,7 @@ async def on_message(message):
 
         #Getting substring from User
         Usr = embed.description
-        carrot1 = "<"
+        carrot1 = "<@"
         carrot2 = ">"
         indx3 = Usr.index(carrot1)
         indx4 = Usr.index(carrot2)
@@ -89,9 +87,11 @@ async def on_message(message):
         #gets the user name from the description field
         for idx in range(indx3 + len(carrot1), indx4):
           usr = usr + Usr[idx]
+        
           
           
-       get_userId(usr)
+       user_id = int(usr)   
+       await get_userID(user_id)
        #Get username from mention
        #member1 = message.mentions[0].id
 
@@ -152,11 +152,7 @@ async def on_message(message):
 
 
 
-@bot.command()  # pass_context is not necesary since more than few versions back
-async def test(ctx): 
-  user_id = 234395307759108106 # renamed id to user_id to make it more readable
-  user = bot.get_user(user_id)
-  print(user)
+
 
 
 @bot.command()
