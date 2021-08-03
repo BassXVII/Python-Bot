@@ -4,7 +4,8 @@ import os
 import logging
 import time
 from discord.ext import commands
-#from discord.ext.commands import Bot
+import requests
+from bs4 import BeautifulSoup
 import random
 intents = discord.Intents.default()
 intents.members = True
@@ -171,7 +172,6 @@ async def SuggestedList(ctx):
         color=0xF1C40F)
   await ctx.channel.send(embed=embed)
   
-
 
 
 
