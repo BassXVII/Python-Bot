@@ -23,7 +23,7 @@ logger.addHandler(handler)
 
 
 
-testWords = [ "Fuck", "shit", "Damn", "Ass", "cunt", "bitch"]
+testWords = [ "Fuk", "cunt"]
 responses = [ "Thats not nice. Im dissapointed in you.", "Get that dirty language outta here", "Do you kiss your momma with that mouth?"]
 
 
@@ -111,7 +111,7 @@ async def on_message(message):
 
     #Help info
     if message.content.startswith("!halp"):
-        await message.channel.send("Current commands: \n1.Gey\n2.Purge\n3. .add\n4. .playList\n 5. SuggestedList")
+        await message.channel.send("Current commands: \n .Info\n1.Gey\n2.Purge\n3. .add\n4. .playList\n 5. SuggestedList")
 
     #Tell user how gay they are.
     #make a command for this later
@@ -188,5 +188,8 @@ async def SuggestedList(ctx):
   await ctx.channel.send(embed=embed)
    
   
+@bot.command()
+async def info(ctx):
+   await ctx.channel.send("Hi there, im Snakey. Im written in python. Im here to mainly keep track of songs we have played. For beginners, each command is case sensitive, an dmost require a .before them. IDk, im working on fixing that. Most of the commands you can figure out. Im getting kinda high :)")
 keep_alive()
 bot.run(os.getenv('TOKEN'))
