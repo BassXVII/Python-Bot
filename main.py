@@ -31,6 +31,8 @@ Lonely = ["Where are the boys","where are the boys", "Whos on", "whos on", "wher
 
 HereIAm = ["Well, it looks like no one is on at the moment, but im here. ", "Looks liek it's just you bud, but im here! Not that i can do much", "No one likes you.", "Well, I'd keep you company, but it seems as if im programmed with only a limited number of responses to a limited number of questions. So that's not much help,is it.", "IDK, you have a lot of fake friends, huh. "]
 
+RPS = ["Rock", "Paper", "Scissors", "I choose scissors and cut ya nuts off, beat that!"]
+
 
 @bot.event
 async def on_ready():
@@ -140,6 +142,17 @@ async def on_message(message):
         # Output expected UnboundLocalErrors.
         logger.error(error)
 
+
+  if message.content.startswith('Rock') or message.content.startswith('Paper') or message.content.startswith('Scissors'):
+        output = random.choice(RPS);
+        if message.content == output:
+          await message.channel.send("We chose the same thing, I chose " + output)
+          await message.channel.send("Tie game")
+        else: 
+          await message.channel.send(output)
+
+
+
  
 @bot.command()
 async def add(ctx, * , args):
@@ -191,5 +204,8 @@ async def SuggestedList(ctx):
 @bot.command()
 async def info(ctx):
    await ctx.channel.send("Hi there, im Snakey. Im written in python. Im here to mainly keep track of songs we have played. For beginners, each command is case sensitive, an dmost require a .before them. IDk, im working on fixing that. Most of the commands you can figure out. Im getting kinda high :)")
+
+
+
 keep_alive()
 bot.run(os.getenv('TOKEN'))
