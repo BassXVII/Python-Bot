@@ -9,6 +9,7 @@ python = "^3.8"
 discord = "^1.0.1"
 flask = "^1.1.2"
 bs4 = "^0.0.1"
+spotipy = "^2.19.0"
 
 [tool.poetry.dev-dependencies]
 

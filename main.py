@@ -2,13 +2,16 @@ from keep_alive import keep_alive
 import discord
 import os
 import logging
-import time
 import datetime
-from datetime import date 
 from discord.ext import commands
 import random
 intents = discord.Intents.default()
 intents.members = True
+#import spotipy
+#from spotipy.oauth2 import SpotifyOAuth
+
+
+
 
 #bot = discord.bot()
 bot = commands.Bot(command_prefix = '.', intents = intents)
@@ -21,15 +24,6 @@ handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w'
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
-
-
-testWords = [ "Fuk", "cunt"]
-responses = [ "Thats not nice. Im dissapointed in you.", "Get that dirty language outta here", "Do you kiss your momma with that mouth?"]
-
-
-Lonely = ["Where are the boys","where are the boys", "Whos on", "whos on", "where is everybody", "Where is everybody", "where tha boys at", "Where tha hoes at", "where my hoes at", "where tha hoes at", "where the hoes at", "anyone on"]
-
-HereIAm = ["Well, it looks like no one is on at the moment, but im here. ", "Looks liek it's just you bud, but im here! Not that i can do much", "No one likes you.", "Well, I'd keep you company, but it seems as if im programmed with only a limited number of responses to a limited number of questions. So that's not much help,is it.", "IDK, you have a lot of fake friends, huh. "]
 
 RPS = ["Rock", "Paper", "Scissors"]
 Player_input = ["Rock", "rock", "Paper", "paper", "Scissors", "scissors"]
@@ -52,18 +46,14 @@ async def get_userID(user_id):
 @bot.event
 async def on_message(message):
   try:
-    if message.content.startswith("Purge"):
-      await message.channel.purge(limit=30)
-      await message.channel.send("Snakey cleared away 30 messages")
-
-    #Message to see if bot is up
+     #Message to see if bot is up
     if message.content.startswith('.Ping'):
         await message.channel.send('Pong!')
 
       
 
     
-    if(message.author.id == 234395307759108106): 
+    if(message.author.id == 369208607126061057): 
       embeds = message.embeds # return list of embeds
       for embed in embeds:
        print(embed.to_dict()) # it's content of embed in dict
@@ -102,39 +92,11 @@ async def on_message(message):
       with open("SongsFile.txt", "a+") as f:
         f.write(str(date_now) + ": "+ res + " Requested by: " + str(user) + "\n")
 
-    #Message based on a random word
-    if any(word in message.content for word in testWords):
-        await message.channel.purge(limit=1)
-        await message.channel.send(random.choice(responses))
-
-    if any(word in message.content for word in Lonely):
-        await message.channel.send(random.choice(HereIAm))
-
-
-    #Help info
+   #Help info
     if message.content.startswith("halp"):
         await message.channel.send("Current commands: \n .Info\n1.Gey\n2.Purge\n3. .add\n4. .playList\n 5. SuggestedList")
 
-    #Tell user how gay they are.
-    #make a command for this later
-    randInt = random.randint(1,100)
-    if message.content.startswith("gey"):
-        await message.channel.send(f"{message.author} is {randInt} percent gay")
-
-        if randInt in range(1,20):
-            await message.channel.send("Wow, thats kinda straight.")
-        elif randInt in range(21,30):
-            await message.channel.send("Damn, shawty, your getting there.")
-        elif randInt in range(31,55):
-            await message.channel.send("Hows that closet lookin?")
-        elif randInt in range(56,65):
-            await message.channel.send("Always wondering why you liked sausage so much.")
-        elif randInt in range(65-75):
-            await message.channel.send("Your as staight as a circle")
-        elif randInt in range(75-85):
-            await message.channel.send("You a pee pee muncher")
-        else:
-            await  message.channel.send("Your gayer than james charles. Quit it.")
+ 
     await bot.process_commands(message)
 
 
@@ -163,12 +125,6 @@ async def add(ctx, * , args):
         f.write("¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯")
         f.write("\n")
     
-#simple ping command
-@bot.command()
-async def ping(ctx, member):
-    await ctx.send(f"Pinging, {ctx.author.mention}")
-
-
 #commands to get embedded lists of song lists
 @bot.command()
 async def playList(ctx):
@@ -217,11 +173,20 @@ async def rps(ctx, * , args):
   else:
     await ctx.channel.send("Snakey beat your "+ args + " with his " + output1)
 
-
+bot.load_extension("cogs.rps")
+bot.load_extension("cogs.Purge")
+bot.load_extension("cogs.gey")
+bot.load_extension("cogs.phrases")
 #@bot.command()
 #async def Purge(ctx, * , args):
 #      await ctx.channel.purge(limit=args)
 #     await ctx.channel.send("Snakey cleared away 30 messages")
+
+#command not working in cogs folder
+@bot.command()
+async def clear(ctx, amount=25):
+  await ctx.channel.purge(limit=amount)
+  await ctx.channel.send("Snakey deleted 25 previous messages!")
 
 
 keep_alive()
