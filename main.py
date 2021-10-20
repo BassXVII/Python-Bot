@@ -9,10 +9,6 @@ intents = discord.Intents.default()
 intents.members = True
 #import spotipy
 #from spotipy.oauth2 import SpotifyOAuth
-
-
-
-
 #bot = discord.bot()
 bot = commands.Bot(command_prefix = '.', intents = intents)
 
@@ -25,13 +21,20 @@ handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(me
 logger.addHandler(handler)
 
 
-RPS = ["Rock", "Paper", "Scissors"]
-Player_input = ["Rock", "rock", "Paper", "paper", "Scissors", "scissors"]
+RPS = ["rock", "paper", "scissors"]
+Player_input = ["rock", "paper", "scissors"]
 
 
+testWords = [ "Fuk", "cunt"]
+responses = [ "Thats not nice. Im dissapointed in you.", "Get that dirty language outta here", "Do you kiss your momma with that mouth?"]
+
+
+Lonely = ["Where are the boys","where are the boys", "Whos on", "whos on", "where is everybody", "Where is everybody", "where tha boys at", "Where tha hoes at", "where my hoes at", "where tha hoes at", "where the hoes at", "anyone on"]
+
+HereIAm = ["Well, it looks like no one is on at the moment, but im here. ", "Looks like it's just you bud, but im here! Not that i can do much", "No one likes you.", "Well, I'd keep you company, but it seems as if im programmed with only a limited number of responses to a limited number of questions. So that's not much help,is it.", "IDK, you have a lot of fake friends, huh. "]
 @bot.event
 async def on_ready():
-    print('We have logged in as {0.user}'.format(bot))
+    print('We have logged in as {0.user}, Yippy ki Yay'.format(bot))
 # pass_context is not necesary since more than few versions back
 
 
@@ -51,7 +54,12 @@ async def on_message(message):
         await message.channel.send('Pong!')
 
       
+    if any(word in message.content for word in testWords):
+      await message.channel.purge(limit=1)
+      await message.channel.send(random.choice(responses))
 
+    if any(word in message.content for word in Lonely):
+      await message.channel.send(random.choice(HereIAm))
     
     if(message.author.id == 369208607126061057): 
       embeds = message.embeds # return list of embeds
@@ -153,25 +161,29 @@ async def info(ctx):
 #Rock paper scissors command
 @bot.command()
 async def rps(ctx, * , args):
-  output1 = random.choice(RPS);
+  output1 = random.choice(RPS)
   player1 = ctx.author.name
   randInt = random.randint(1,10)
+  args = args.strip()
 
   
   if (randInt == 5):
     await ctx.channel.send("Snakey chose very pointy scissors and cut ya nuts off. That must suck.")
-  elif args.lower() == output1.lower():
+  elif args == output1:
     await ctx.channel.send("You both tied :)")
-  elif args == "Paper" or args == "paper" and output1 == "Rock":
+  elif args == "paper" and output1 == "Rock":
     await ctx.channel.send("Snakey chose " + output1 + ", " + player1 + " won that round")
-  elif args == "Rock" or args == "rock" and output1 == "Scissors":
+  elif args == "rock" and output1 == "scissors":
     await ctx.channel.send("Snakey chose " + output1 + ", " + player1 + " won that round")
-  elif args == "Scissors" or args == "scissors"  and output1 == "Paper":
+  elif args == "scissors"  and output1 == "paper":
     await ctx.channel.send("Snakey chose " + output1 + ", " + player1 + " won that round")
-  elif args != Player_input:
+  elif args != "rock" or args != "paper" or args != "scissors":
     await ctx.channel.send("Hey, dont do that. You cant just add " + args + " into the game. Shame.")
   else:
     await ctx.channel.send("Snakey beat your "+ args + " with his " + output1)
+
+
+  
 
 bot.load_extension("cogs.rps")
 bot.load_extension("cogs.Purge")
