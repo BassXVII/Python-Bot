@@ -6,16 +6,10 @@ intents.members = True
 
 bot = commands.Bot(command_prefix = '.', intents = intents)
 
-class MyCog(commands.Cog):
+class gey(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-async def get_userID(user_id): 
-   # renamed id to user_id to make it more readable
- global user 
- user= bot.get_user(user_id)
- print(user)
- return (user)
 
 @bot.event
 async def on_message(message):
@@ -38,8 +32,5 @@ async def on_message(message):
         else:
             await  message.channel.send("Your gayer than james charles. Quit it.")
 
-
-  await bot.process_commands(message)
-
 def setup(bot):
-  bot.add_cog(MyCog(bot))
+  bot.add_cog(gey(bot))

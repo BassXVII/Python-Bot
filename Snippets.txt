@@ -4,3 +4,19 @@
        #print("Extracted Data " + res + " requested By " + str(member1))
 
        SOng
+
+
+#@bot.command()
+#async def Purge(ctx, * , args):
+#      await ctx.channel.purge(limit=args)
+#     await ctx.channel.send("Snakey cleared away 30 messages")
+
+
+#get user id
+
+async def get_userID(user_id): 
+   # renamed id to user_id to make it more readable
+ global user 
+ user= bot.get_user(user_id)
+ print(user)
+ return (user)

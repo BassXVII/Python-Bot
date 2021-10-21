@@ -14,16 +14,16 @@ handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(me
 logger.addHandler(handler)
 
 
-class MyCog(commands.Cog):
+class Purge(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
 @bot.command()
-async def delete(self, amount=25):
-  await self.channel.purge(limit=amount)
-  await self.channel.send("Snakey deleted 25 previous messages!")
+async def delete(ctx, amount=25):
+  await ctx.channel.purge(limit=amount)
+  await ctx.channel.send("Snakey deleted 25 previous messages!")
 
 
 
 def setup(bot):
-  bot.add_cog(MyCog(bot))
+  bot.add_cog(Purge(bot))

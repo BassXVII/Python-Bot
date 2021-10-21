@@ -25,13 +25,7 @@ RPS = ["rock", "paper", "scissors"]
 Player_input = ["rock", "paper", "scissors"]
 
 
-testWords = [ "Fuk", "cunt"]
-responses = [ "Thats not nice. Im dissapointed in you.", "Get that dirty language outta here", "Do you kiss your momma with that mouth?"]
 
-
-Lonely = ["Where are the boys","where are the boys", "Whos on", "whos on", "where is everybody", "Where is everybody", "where tha boys at", "Where tha hoes at", "where my hoes at", "where tha hoes at", "where the hoes at", "anyone on"]
-
-HereIAm = ["Well, it looks like no one is on at the moment, but im here. ", "Looks like it's just you bud, but im here! Not that i can do much", "No one likes you.", "Well, I'd keep you company, but it seems as if im programmed with only a limited number of responses to a limited number of questions. So that's not much help,is it.", "IDK, you have a lot of fake friends, huh. "]
 @bot.event
 async def on_ready():
     print('We have logged in as {0.user}, Yippy ki Yay'.format(bot))
@@ -54,12 +48,6 @@ async def on_message(message):
         await message.channel.send('Pong!')
 
       
-    if any(word in message.content for word in testWords):
-      await message.channel.purge(limit=1)
-      await message.channel.send(random.choice(responses))
-
-    if any(word in message.content for word in Lonely):
-      await message.channel.send(random.choice(HereIAm))
     
     if(message.author.id == 369208607126061057): 
       embeds = message.embeds # return list of embeds
@@ -168,7 +156,7 @@ async def rps(ctx, * , args):
 
   
   if (randInt == 5):
-    await ctx.channel.send("Snakey chose very pointy scissors and cut ya nuts off. That must suck.")
+    await ctx.channel.send(".")
   elif args == output1:
     await ctx.channel.send("You both tied :)")
   elif args == "paper" and output1 == "Rock":
@@ -183,22 +171,20 @@ async def rps(ctx, * , args):
     await ctx.channel.send("Snakey beat your "+ args + " with his " + output1)
 
 
-  
-
-bot.load_extension("cogs.rps")
-bot.load_extension("cogs.Purge")
-bot.load_extension("cogs.gey")
-bot.load_extension("cogs.phrases")
-#@bot.command()
-#async def Purge(ctx, * , args):
-#      await ctx.channel.purge(limit=args)
-#     await ctx.channel.send("Snakey cleared away 30 messages")
-
-#command not working in cogs folder
 @bot.command()
 async def clear(ctx, amount=25):
   await ctx.channel.purge(limit=amount)
-  await ctx.channel.send("Snakey deleted 25 previous messages!")
+  await ctx.channel.send("Snakey deleted 25 previous messages!")  
+
+bot.load_extension("cogs.ping")
+bot.load_extension("cogs.Purge")
+bot.load_extension("cogs.gey")
+bot.load_extension("cogs.phrases")
+bot.load_extension("cogs.rpsInfo")
+
+
+#command not working in cogs folder
+
 
 
 keep_alive()

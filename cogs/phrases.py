@@ -14,7 +14,7 @@ Lonely = ["Where are the boys","where are the boys", "Whos on", "whos on", "wher
 
 HereIAm = ["Well, it looks like no one is on at the moment, but im here. ", "Looks liek it's just you bud, but im here! Not that i can do much", "No one likes you.", "Well, I'd keep you company, but it seems as if im programmed with only a limited number of responses to a limited number of questions. So that's not much help,is it.", "IDK, you have a lot of fake friends, huh. "]
 
-class MyCog(commands.Cog):
+class phrases(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -29,4 +29,4 @@ async def on_message(message):
     await message.channel.send(random.choice(HereIAm))
 
 def setup(bot):
-  bot.add_cog(MyCog(bot))
+  bot.add_cog(phrases(bot))
