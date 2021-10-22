@@ -2,6 +2,7 @@ from keep_alive import keep_alive
 import discord
 import os
 import logging
+from PIL import Image
 import datetime
 from discord.ext import commands
 import random
@@ -12,8 +13,6 @@ intents.members = True
 #bot = discord.bot()
 bot = commands.Bot(command_prefix = '.', intents = intents)
 
-
-
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
@@ -21,8 +20,9 @@ handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(me
 logger.addHandler(handler)
 
 
-RPS = ["rock", "paper", "scissors"]
-Player_input = ["rock", "paper", "scissors"]
+RPS = ["rock", "paper", "scissors", "lizard", "spock"]
+sanitized_input = ["rock", "paper", "scissors", "lizard", "spock"]
+
 
 
 
@@ -153,23 +153,44 @@ async def rps(ctx, * , args):
   player1 = ctx.author.name
   randInt = random.randint(1,10)
   args = args.strip()
+  
 
   
-  if (randInt == 5):
-    await ctx.channel.send(".")
-  elif args == output1:
+  if args == output1:
     await ctx.channel.send("You both tied :)")
-  elif args == "paper" and output1 == "Rock":
+  elif args == "paper" and output1 == "rock":
     await ctx.channel.send("Snakey chose " + output1 + ", " + player1 + " won that round")
+  elif args == "paper" and output1 == "spock":
+    await ctx.channel.send("paper disproves " + output1 + ", " + player1 + " won that round")
   elif args == "rock" and output1 == "scissors":
     await ctx.channel.send("Snakey chose " + output1 + ", " + player1 + " won that round")
+  elif args == "rock"  and output1 == "lizard":
+    await ctx.channel.send("Rock crushes " + output1 + ", " + player1 + " won that round")
   elif args == "scissors"  and output1 == "paper":
     await ctx.channel.send("Snakey chose " + output1 + ", " + player1 + " won that round")
-  elif args != "rock" or args != "paper" or args != "scissors":
+  elif args == "scissors"  and output1 == "lizard":
+    await ctx.channel.send("the scissors decaptitates the " + output1 + ", must have been a small lizard. " + player1 + " won that round")
+  elif args == "spock"  and output1 == "rock":
+    await ctx.channel.send("Spock vaporized " + output1 + ", " + player1 + " won that round")
+  elif args == "spock"  and output1 == "scissors":
+    await ctx.channel.send("Spock smashes " + output1 + ", " + player1 + " won that round")
+  elif args == "lizard"  and output1 == "paper":
+    await ctx.channel.send("Your lizard just ate snakey's " + output1 + ", " + player1 + " won that round")
+  elif args == "lizard"  and output1 == "spock":
+    await ctx.channel.send("Big lizard poisons " + output1 + ", " + player1 + " won that round")
+  elif not any([sanitized_input]):
     await ctx.channel.send("Hey, dont do that. You cant just add " + args + " into the game. Shame.")
+  elif (randInt == 5):
+    await ctx.channel.send("Snakey brought a gun to a hand fight. Good luck beating that.")
   else:
     await ctx.channel.send("Snakey beat your "+ args + " with his " + output1)
 
+
+@bot.command()
+async def rpsInfo(self):
+  img = 'imgs/RPSLS.png'
+  await self.send('Here ya go', file=discord.File(img))
+  await self.channel.send("Here are the rules: \nScissors cuts paper, paper covers rock, rock crushes lizard, lizard poisons Spock, Spock smashes scissors, scissors decapitates lizard, lizard eats paper, paper disproves Spock, Spock vaporizes rock, and as it always has, rock crushes scissors.")
 
 @bot.command()
 async def clear(ctx, amount=25):
@@ -181,9 +202,6 @@ bot.load_extension("cogs.Purge")
 bot.load_extension("cogs.gey")
 bot.load_extension("cogs.phrases")
 bot.load_extension("cogs.rpsInfo")
-
-
-#command not working in cogs folder
 
 
 

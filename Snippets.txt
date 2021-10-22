@@ -20,3 +20,10 @@ async def get_userID(user_id):
  user= bot.get_user(user_id)
  print(user)
  return (user)
+
+
+
+@command.commands()
+async def delete(ctx, amount=25):
+  await ctx.channel.purge(limit=amount)
+  await ctx.channel.send("Snakey deleted 25 previous messages!")

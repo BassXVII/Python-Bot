@@ -15,13 +15,15 @@ logger.addHandler(handler)
 
 
 class Purge(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+  def __init__(self, bot: commands.Bot):
+    self.bot = bot
 
-@bot.command()
-async def delete(ctx, amount=25):
-  await ctx.channel.purge(limit=amount)
-  await ctx.channel.send("Snakey deleted 25 previous messages!")
+
+@commands.command(name="ping")
+async def ping(self, ctx: commands.Context):
+  await ctx.send(f"Pong! {round(self.bot.latency * 1000)}ms")
+
+
 
 
 
