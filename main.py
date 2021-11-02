@@ -1,4 +1,4 @@
-import discord, os, logging, datetime, sys, random
+import discord, os, logging, datetime, sys, random, socket
 from keep_alive import keep_alive
 from pythonping import ping
 from PIL import Image
@@ -21,7 +21,7 @@ RPS = ["rock", "paper", "scissors", "lizard", "spock"]
 sanitized_input = ["rock", "paper", "scissors", "lizard", "spock"]
 
 
-
+IP = "0.0.0.0"
 
 @bot.event
 async def on_ready():
@@ -191,11 +191,9 @@ async def rps(ctx, * , args):
   #temp.close()
  # shutils.move('temp', 'membersList.txt')
     
-@bot.command()
-async def pingmc(ctx, host):
-  #ping(host)
-  await ctx.channel.send("Im working on that for right now. Please wait for this feature " + host)
-  await pingmc(['finally the dumbass succeded.LOL']) 
+
+
+  
 
 @bot.command()
 async def rpsInfo(self):
@@ -219,10 +217,26 @@ async def clear(ctx, amount=25):
 
 #all MC commands
 @bot.command()
-async def setIP(ctx, IP):
-  global ip 
-  ip = IP
-  await ctx.channel.send("Snakey set the MC server IP to " + IP)  
+async def setIP(ctx, ip):
+  global IP 
+  IP = ip
+  await ctx.channel.send("Snakey set the MC server IP to " + ip)  
+
+@bot.command()
+async def pingmc(ctx, port):
+  
+  host = IP
+  timeout_seconds=1
+  sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  sock.settimeout(timeout_seconds)
+  result = sock.connect_ex((host,int(port)))
+  if result == 0:
+    print("Host: {}, Port: {} - True".format(host, port))
+    await ctx.channel.send("Server is up and ready to go baby")
+  else:
+    print("Host: {}, Port: {} - False".format(host, port))
+    await ctx.channel.send("Server is temporarily down. Please contact your server administrator and tell him to get on it")
+  sock.close()
 
 @bot.command()
 async def mem(ctx):
