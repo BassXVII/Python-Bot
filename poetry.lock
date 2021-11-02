@@ -192,6 +192,33 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "ping3"
+version = "3.0.2"
+description = "A pure python3 version of ICMP ping implementation using raw socket."
+category = "main"
+optional = false
+python-versions = ">=3"
+
+[package.extras]
+dev = ["build", "twine", "pycodestyle"]
+
+[[package]]
+name = "pyping"
+version = "0.0.6"
+description = "A pure python ICMP ping implementation using raw sockets"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "pythonping"
+version = "1.1.0"
+description = "A simple way to ping in Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "requests"
 version = "2.26.0"
 description = "Python HTTP for Humans."
@@ -290,7 +317,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "24f9100cfdd946d35584e77b81e3ec6ef77248069d0cc9b3560c42b4861d2c83"
+content-hash = "30b10de2402b030268aa83cc415a24118c1a5bab86ba95c745be21af971f877b"
 
 [metadata.files]
 aiohttp = [
@@ -480,6 +507,17 @@ multidict = [
     {file = "multidict-5.1.0-cp39-cp39-win32.whl", hash = "sha256:fc13a9524bc18b6fb6e0dbec3533ba0496bbed167c56d0aabefd965584557d80"},
     {file = "multidict-5.1.0-cp39-cp39-win_amd64.whl", hash = "sha256:7df80d07818b385f3129180369079bd6934cf70469f99daaebfac89dca288359"},
     {file = "multidict-5.1.0.tar.gz", hash = "sha256:25b4e5f22d3a37ddf3effc0710ba692cfc792c2b9edfb9c05aefe823256e84d5"},
+]
+ping3 = [
+    {file = "ping3-3.0.2-py3-none-any.whl", hash = "sha256:98be6eb30dedff822d80267a05ec3294a223809fb5b135b9de64fb0d1b69d2af"},
+    {file = "ping3-3.0.2.tar.gz", hash = "sha256:8e21c05876b864222ab5808471795906bf4d9b1d936c345ecb817729ac0d77ad"},
+]
+pyping = [
+    {file = "pyping-0.0.6.tar.gz", hash = "sha256:0da3927380f308e2db83e2eaca32832a9538f2f6b4d2149b128b35ed988d33d2"},
+]
+pythonping = [
+    {file = "pythonping-1.1.0-py3-none-any.whl", hash = "sha256:d558e3e62efa84321e1a8681bad09ff2416a840ef5859cff2634615daf4b7923"},
+    {file = "pythonping-1.1.0.tar.gz", hash = "sha256:71199bdeee942ba1258b65f88ca5624278e63b31e7643ee8ca7292d2f5f77e99"},
 ]
 requests = [
     {file = "requests-2.26.0-py2.py3-none-any.whl", hash = "sha256:6c1246513ecd5ecd4528a0906f910e8f0f9c6b8ec72030dc9fd154dc1a6efd24"},

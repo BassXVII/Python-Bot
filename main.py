@@ -1,11 +1,8 @@
+import discord, os, logging, datetime, sys, random
 from keep_alive import keep_alive
-import discord
-import os
-import logging
+from pythonping import ping
 from PIL import Image
-import datetime
 from discord.ext import commands
-import random
 intents = discord.Intents.default()
 intents.members = True
 #import spotipy
@@ -109,9 +106,6 @@ async def add(ctx, * , args):
 
     await ctx.channel.send("Snakey added " + args + " to the suggested songs list :)")
 
-    
-
-
     with open("Suggested.txt", "a+") as f:
       f.seek(0)
       data = f.read(100)
@@ -152,11 +146,15 @@ async def rps(ctx, * , args):
   output1 = random.choice(RPS)
   player1 = ctx.author.name
   randInt = random.randint(1,10)
-  args = args.strip()
+  args = args.strip().lower()
   
-
   
-  if args == output1:
+    
+  if args != "paper" and args != "rock" and args != "scissors" and args != "lizard" and args != "spock":
+    img = 'imgs/kirby.jpg'
+    await ctx.send(file=discord.File(img))
+    await ctx.channel.send("Hey, dont do that. You cant just add " + args + " into the game. Kirby's not mad, he's just disappointed.")
+  elif args == output1:
     await ctx.channel.send("You both tied :)")
   elif args == "paper" and output1 == "rock":
     await ctx.channel.send("Snakey chose " + output1 + ", " + player1 + " won that round")
@@ -178,24 +176,64 @@ async def rps(ctx, * , args):
     await ctx.channel.send("Your lizard just ate snakey's " + output1 + ", " + player1 + " won that round")
   elif args == "lizard"  and output1 == "spock":
     await ctx.channel.send("Big lizard poisons " + output1 + ", " + player1 + " won that round")
-  elif not any([sanitized_input]):
-    await ctx.channel.send("Hey, dont do that. You cant just add " + args + " into the game. Shame.")
   elif (randInt == 5):
     await ctx.channel.send("Snakey brought a gun to a hand fight. Good luck beating that.")
   else:
     await ctx.channel.send("Snakey beat your "+ args + " with his " + output1)
 
 
+  #temp = open('temp', 'wb')
+  #with open('membersList.txt', 'r') as f:
+    #for line in f:
+     # if line.startswith(player1):
+        #line = line.strip() + '  + 1\n'
+     # temp.write(line.encode('utf-8'))
+  #temp.close()
+ # shutils.move('temp', 'membersList.txt')
+    
+@bot.command()
+async def pingmc(ctx, host):
+  #ping(host)
+  await ctx.channel.send("Im working on that for right now. Please wait for this feature " + host)
+  await pingmc(['finally the dumbass succeded.LOL']) 
+
 @bot.command()
 async def rpsInfo(self):
-  img = 'imgs/RPSLS.png'
-  await self.send('Here ya go', file=discord.File(img))
-  await self.channel.send("Here are the rules: \nScissors cuts paper, paper covers rock, rock crushes lizard, lizard poisons Spock, Spock smashes scissors, scissors decapitates lizard, lizard eats paper, paper disproves Spock, Spock vaporizes rock, and as it always has, rock crushes scissors.")
+
+  embed=discord.Embed(title="RPSLS Rules", description="Here are the rules: \n\nScissors cuts paper, paper covers rock, rock crushes lizard, lizard poisons Spock, Spock smashes scissors, scissors decapitates lizard, lizard eats paper, paper disproves Spock, Spock vaporizes rock, and as it always has, rock crushes scissors.", color=0xFF5733)
+
+  file = discord.File("imgs/RPSLS.png")
+  file2 = discord.File("imgs/logo.png")
+  embed.set_thumbnail(url="attachment://RPSLS.png")
+  #e = discord.Embed()
+  embed.set_author(name = "Ya Boi Snakey", icon_url = "attachment://logo.png")
+  
+  await self.send(file = file, embed=embed)
+  #img = 'imgs/RPSLS.png'
+  #await self.send('Here ya go', file=discord.File(img))
+  #name="RealDrewData", url="https://twitter.com/RealDrewData", icon_url="https://pbs.twimg.com/profile_images/1327036716226646017/ZuaMDdtm_400x400.jpg"
+  #await self.send(embed=embed)
+
 
 @bot.command()
 async def clear(ctx, amount=25):
   await ctx.channel.purge(limit=amount)
   await ctx.channel.send("Snakey deleted 25 previous messages!")  
+
+
+
+@bot.command()
+async def mem(ctx):
+  f= open("membersList.txt","w+")
+  for guild in bot.guilds:
+    for member in guild.members:
+        f.write(member.name + "\n")
+  
+  f.close()
+
+
+
+   
 
 bot.load_extension("cogs.ping")
 bot.load_extension("cogs.Purge")

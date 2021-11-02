@@ -10,6 +10,9 @@ discord = "^1.0.1"
 flask = "^1.1.2"
 bs4 = "^0.0.1"
 spotipy = "^2.19.0"
+pyping = "^0.0.6"
+ping3 = "^3.0.2"
+pythonping = "^1.1.0"
 
 [tool.poetry.dev-dependencies]
 
