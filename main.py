@@ -203,24 +203,26 @@ async def rpsInfo(self):
   embed=discord.Embed(title="RPSLS Rules", description="Here are the rules: \n\nScissors cuts paper, paper covers rock, rock crushes lizard, lizard poisons Spock, Spock smashes scissors, scissors decapitates lizard, lizard eats paper, paper disproves Spock, Spock vaporizes rock, and as it always has, rock crushes scissors.", color=0xFF5733)
 
   file = discord.File("imgs/RPSLS.png")
-  file2 = discord.File("imgs/logo.png")
   embed.set_thumbnail(url="attachment://RPSLS.png")
   #e = discord.Embed()
-  embed.set_author(name = "Ya Boi Snakey", icon_url = "attachment://logo.png")
-  
+  embed.set_author(name = "Ya Boi Snakey", url = "https://discord.com/developers/applications/819659006268276796/information", icon_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/2048px-Python-logo-notext.svg.png")
   await self.send(file = file, embed=embed)
-  #img = 'imgs/RPSLS.png'
-  #await self.send('Here ya go', file=discord.File(img))
-  #name="RealDrewData", url="https://twitter.com/RealDrewData", icon_url="https://pbs.twimg.com/profile_images/1327036716226646017/ZuaMDdtm_400x400.jpg"
-  #await self.send(embed=embed)
+ 
 
 
 @bot.command()
 async def clear(ctx, amount=25):
   await ctx.channel.purge(limit=amount)
-  await ctx.channel.send("Snakey deleted 25 previous messages!")  
+  embed=discord.Embed(title="Sweep sweep sucka", description="Just swept away 25 messages, no problem at all", color=0x33FFFF)
+  embed.set_author(name = "Ya Boi Snakey", url = "https://discord.com/developers/applications/819659006268276796/information", icon_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/2048px-Python-logo-notext.svg.png")
+  await ctx.channel.send(embed=embed)  
 
-
+#all MC commands
+@bot.command()
+async def setIP(ctx, IP):
+  global ip 
+  ip = IP
+  await ctx.channel.send("Snakey set the MC server IP to " + IP)  
 
 @bot.command()
 async def mem(ctx):
@@ -228,12 +230,17 @@ async def mem(ctx):
   for guild in bot.guilds:
     for member in guild.members:
         f.write(member.name + "\n")
+    f.close()
+
+@bot.command()
+async def isMem(ctx, memb):
+  with open('membersList.txt') as f:
+    if memb in f.read():
+        print("true")
+    else:
+      print("False")
   
   f.close()
-
-
-
-   
 
 bot.load_extension("cogs.ping")
 bot.load_extension("cogs.Purge")
