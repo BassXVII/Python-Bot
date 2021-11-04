@@ -1,0 +1,12 @@
+{
+  "name": "test",
+  "description": "This is just a test command, nothing more.",
+  "options": [
+    {
+      "name": "optone",
+      "description": "This is the first option we have.",
+      "type": 3,
+      "required": "false"
+    }
+  ]
+}

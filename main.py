@@ -3,12 +3,24 @@ from keep_alive import keep_alive
 from pythonping import ping
 from PIL import Image
 from discord.ext import commands
+from discord_slash import SlashCommand, SlashContext
+from discord_slash.utils.manage_commands import create_choice, create_option
+import imdb
+
+
 intents = discord.Intents.default()
 intents.members = True
 #import spotipy
 #from spotipy.oauth2 import SpotifyOAuth
 #bot = discord.bot()
 bot = commands.Bot(command_prefix = '.', intents = intents)
+slash = SlashCommand(bot, sync_commands = True)
+guild_ids = [600195673886818314, 650217909687156741]
+
+ia = imdb.IMDb()
+
+
+
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
@@ -140,6 +152,15 @@ async def SuggestedList(ctx):
 async def info(ctx):
    await ctx.channel.send("Hi there, im Snakey. Im written in python. Im here to mainly keep track of songs we have played. For beginners, each command is case sensitive, an dmost require a .before them. IDk, im working on fixing that. Most of the commands you can figure out. Im getting kinda high :)")
 
+@slash.slash(
+  name = "Info",
+  description = "Who am i? Who U?",
+  
+)
+async def _poo(ctx:SlashContext):
+  await ctx.send("Hi there, im Snakey. Im written in python. Im here to mainly keep track of songs we have played. For beginners, each command is case sensitive, an dmost require a .before them. IDk, im working on fixing that. Most of the commands you can figure out. Im getting kinda high :)")
+
+
 #Rock paper scissors command
 @bot.command()
 async def rps(ctx, * , args):
@@ -256,8 +277,25 @@ async def isMem(ctx, memb):
   
   f.close()
 
+
+#------------------------------------------------#
+
+@bot.command()
+async def movieQ(ctx, * , movieSearch):
+  movieSearched = movieSearch
+  movies = ia.search_movie(movieSearched)
+  movieResults = str(movies[0])
+  await ctx.channel.send(movieResults)
+  print(movies)
+
+
+
+
+
+
 bot.load_extension("cogs.ping")
 bot.load_extension("cogs.Purge")
+
 bot.load_extension("cogs.gey")
 bot.load_extension("cogs.phrases")
 bot.load_extension("cogs.rpsInfo")

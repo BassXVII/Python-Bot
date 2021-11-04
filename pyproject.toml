@@ -13,6 +13,7 @@ spotipy = "^2.19.0"
 pyping = "^0.0.6"
 ping3 = "^3.0.2"
 pythonping = "^1.1.0"
+imdb-cli-tool = "^1.0.1"
 
 [tool.poetry.dev-dependencies]
 
