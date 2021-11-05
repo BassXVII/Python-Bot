@@ -2,10 +2,15 @@ import discord, os, logging, datetime, sys, random, socket
 from keep_alive import keep_alive
 from pythonping import ping
 from PIL import Image
+import json
 from discord.ext import commands
-from discord_slash import SlashCommand, SlashContext
-from discord_slash.utils.manage_commands import create_choice, create_option
-import imdb
+import pandas as pd
+#from discord_slash import SlashCommand, SlashContext
+#from discord_slash.utils.manage_commands import create_choice, create_option
+import requests
+from pprint import PrettyPrinter
+pp = PrettyPrinter()
+
 
 
 intents = discord.Intents.default()
@@ -14,12 +19,12 @@ intents.members = True
 #from spotipy.oauth2 import SpotifyOAuth
 #bot = discord.bot()
 bot = commands.Bot(command_prefix = '.', intents = intents)
-slash = SlashCommand(bot, sync_commands = True)
+#slash = SlashCommand(bot, sync_commands = True)
 guild_ids = [600195673886818314, 650217909687156741]
 
-ia = imdb.IMDb()
 
 
+apiKey = '917a0892'
 
 
 logger = logging.getLogger('discord')
@@ -152,13 +157,13 @@ async def SuggestedList(ctx):
 async def info(ctx):
    await ctx.channel.send("Hi there, im Snakey. Im written in python. Im here to mainly keep track of songs we have played. For beginners, each command is case sensitive, an dmost require a .before them. IDk, im working on fixing that. Most of the commands you can figure out. Im getting kinda high :)")
 
-@slash.slash(
-  name = "Info",
-  description = "Who am i? Who U?",
+#@slash.slash(
+ # name = "Info",
+ # description = "Who am i? Who U?",
   
-)
-async def _poo(ctx:SlashContext):
-  await ctx.send("Hi there, im Snakey. Im written in python. Im here to mainly keep track of songs we have played. For beginners, each command is case sensitive, an dmost require a .before them. IDk, im working on fixing that. Most of the commands you can figure out. Im getting kinda high :)")
+#)
+#async def _poo(ctx:SlashContext):
+#  await ctx.send("Hi there, im Snakey. Im written in python. Im here to mainly keep track of songs we have played. For beginners, each command is case sensitive, an dmost require a .before them. IDk, im working on fixing that. Most of the commands you can figure out. Im getting kinda high :)")
 
 
 #Rock paper scissors command
@@ -282,11 +287,31 @@ async def isMem(ctx, memb):
 
 @bot.command()
 async def movieQ(ctx, * , movieSearch):
-  movieSearched = movieSearch
-  movies = ia.search_movie(movieSearched)
-  movieResults = str(movies[0])
-  await ctx.channel.send(movieResults)
-  print(movies)
+  data_URL = 'http://www.omdbapi.com/?apikey='+apiKey
+  year = ''
+  movie = movieSearch 
+  params = {
+      't':movie,
+      'type':'movie',
+      'y':year,
+      'plot':'full'
+}
+  response = requests.get(data_URL,params=params).json()
+  #pp.pprint(response)
+  
+
+  with open ("Movie.json", "w") as f:
+    json.dump ( response, f)
+
+
+
+  f = open('Movie.json', 'r')
+  db = json.load(f)
+
+  Rating = db['Ratings'][0]['Value']
+  
+  await ctx.channel.send(movieSearch + " has a rating of: " + Rating)
+  
 
 
 
@@ -304,3 +329,7 @@ bot.load_extension("cogs.rpsInfo")
 
 keep_alive()
 bot.run(os.getenv('TOKEN'))
+
+
+
+

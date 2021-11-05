@@ -27,3 +27,12 @@ async def get_userID(user_id):
 async def delete(ctx, amount=25):
   await ctx.channel.purge(limit=amount)
   await ctx.channel.send("Snakey deleted 25 previous messages!")
+
+
+
+  async def movieQ(ctx, * , movieSearch):
+  movieSearched = movieSearch
+  movies = ia.search_movie(movieSearched)
+  movieResults = str(movies[0])
+  await ctx.channel.send(movieResults)
+  print(movies)
