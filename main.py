@@ -308,13 +308,18 @@ async def movieQ(ctx, * , movieSearch):
   f = open('Movie.json', 'r')
   db = json.load(f)
 
-  Rating = db['Ratings'][0]['Value']
+#not all movies have all scores. You will have to do a for loop to scan every query
+  IMDB_Rating = db['Ratings'][0]['Value']
+  RottenTom_Rating = db['Ratings'][1]['Value']
+  MetaCritic_Rating = db['Ratings'][2]['Value']
+
+  moviePlot = db["Plot"]
+
+  for i in db.keys('Ratings'):    
+    await ctx.channel.send(movieSearch + " Scores: \n"+ "Rotten Tomatoes  score: " + i)
+  await ctx.channel.send(movieSearch + " Plot: " + moviePlot)
   
-  await ctx.channel.send(movieSearch + " has a rating of: " + Rating)
-  
-
-
-
+  #(movieSearch + " Scores: \n"+ "Rotten Tomatoes  score: " + RottenTom_Rating + "\nIMDB score: " + IMDB_Rating + "\nMetaCritic score: " + MetaCritic_Rating
 
 
 

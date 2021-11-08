@@ -36,3 +36,6 @@ async def delete(ctx, amount=25):
   movieResults = str(movies[0])
   await ctx.channel.send(movieResults)
   print(movies)
+
+   for key in book:
+	print(key, book[key])
