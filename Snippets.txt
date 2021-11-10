@@ -39,3 +39,12 @@ async def delete(ctx, amount=25):
 
    for key in book:
 	print(key, book[key])
+
+
+
+  #not all movies have all scores. You will have to do a for loop to scan every query
+  #IMDB_Rating = db['Ratings'][0]['Value']
+  #RottenTom_Rating = db['Ratings'][1]['Value']
+  #MetaCritic_Rating = db['Ratings'][2]['Value']
+
+  #pp.pprint(('\n'.join("{}: {}".format(k, v) for k, v in db.items())))

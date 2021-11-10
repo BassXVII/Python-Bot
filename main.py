@@ -5,6 +5,14 @@ from PIL import Image
 import json
 from discord.ext import commands
 import pandas as pd
+import urllib.request
+import urllib.parse
+import urllib.error
+from bs4 import BeautifulSoup
+import ssl
+import ast
+
+from urllib.request import Request, urlopen
 #from discord_slash import SlashCommand, SlashContext
 #from discord_slash.utils.manage_commands import create_choice, create_option
 import requests
@@ -288,13 +296,18 @@ async def isMem(ctx, memb):
 @bot.command()
 async def movieQ(ctx, * , movieSearch):
   data_URL = 'http://www.omdbapi.com/?apikey='+apiKey
+  
   year = ''
+
   movie = movieSearch 
   params = {
-      't':movie,
+      't': movie,
       'type':'movie',
       'y':year,
-      'plot':'full'
+      'plot':'full',
+      'tomatoes':'true',
+      'tomato_consensus':'true'
+      
 }
   response = requests.get(data_URL,params=params).json()
   #pp.pprint(response)
@@ -308,19 +321,45 @@ async def movieQ(ctx, * , movieSearch):
   f = open('Movie.json', 'r')
   db = json.load(f)
 
-#not all movies have all scores. You will have to do a for loop to scan every query
-  IMDB_Rating = db['Ratings'][0]['Value']
-  RottenTom_Rating = db['Ratings'][1]['Value']
-  MetaCritic_Rating = db['Ratings'][2]['Value']
+
 
   moviePlot = db["Plot"]
+ 
+  value_string = "\n".join(f"{rating['Source']}: {rating['Value']}" for rating in db['Ratings'])
 
-  for i in db.keys('Ratings'):    
-    await ctx.channel.send(movieSearch + " Scores: \n"+ "Rotten Tomatoes  score: " + i)
-  await ctx.channel.send(movieSearch + " Plot: " + moviePlot)
+  
+
+  embed=discord.Embed(title=movieSearch, description= moviePlot, color=0xFF5733)
+  imageURL = db["Poster"]
+  embed.set_image(url=imageURL)  
+  #e = discord.Embed()
+  embed.set_author(name = "Ya Boi Snakey", url = "https://discord.com/developers/applications/819659006268276796/information", icon_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/2048px-Python-logo-notext.svg.png")
+
+  embed.add_field(name='Ratings', value= value_string, inline=True)
+  embed.add_field(name = "Misc details" , value = "Year released: " + db['Year'] + "\nRating: " + db['Rated'], inline= True)
+  await ctx.channel.send(embed=embed)
+  pp.pprint(value_string)
+  
   
   #(movieSearch + " Scores: \n"+ "Rotten Tomatoes  score: " + RottenTom_Rating + "\nIMDB score: " + IMDB_Rating + "\nMetaCritic score: " + MetaCritic_Rating
 
+
+@bot.command()
+async def Actor(ctx, * , songname):
+  
+  data_URL = "http://www.songlyrics.com/"
+  response = requests.get(data_URL).json()
+
+  print(response)
+
+  #------------------------------LYRICS----------------------------------------#
+@bot.command()
+async def Lyrics(ctx, * , songname):
+  
+  data_URL = "http://www.songlyrics.com/"
+  response = requests.get(data_URL).json()
+
+  print(response)
 
 
 bot.load_extension("cogs.ping")
