@@ -19,6 +19,9 @@ import requests
 from pprint import PrettyPrinter
 pp = PrettyPrinter()
 
+#genius_client_id = 'CLQVbNC3QwV_yLUqufIS_nJPqyrOpylB69nn6eLQZSIva_AJeE0TIyFQqLvU92sN'
+#genius_secret_id = 'bqIijTDld-eoSr6E5igdhqV4wEBDX5FmzyJQBo3bb-324lBIEDteFaOhaEKH7cd19QucnCY2f3rirTau8D8hAA'
+client_access_token = 'x-Ip1tsZKQcKQQHhsLUAARDtltGp62ujVLz9s_Dqd-Fu4EBhRwMZuclD2UDZkdZ1'
 
 
 intents = discord.Intents.default()
@@ -305,8 +308,7 @@ async def movieQ(ctx, * , movieSearch):
       'type':'movie',
       'y':year,
       'plot':'full',
-      'tomatoes':'true',
-      'tomato_consensus':'true'
+      'tomatoes':'true'
       
 }
   response = requests.get(data_URL,params=params).json()
@@ -316,18 +318,12 @@ async def movieQ(ctx, * , movieSearch):
   with open ("Movie.json", "w") as f:
     json.dump ( response, f)
 
-
-
   f = open('Movie.json', 'r')
   db = json.load(f)
 
-
-
   moviePlot = db["Plot"]
  
-  value_string = "\n".join(f"{rating['Source']}: {rating['Value']}" for rating in db['Ratings'])
-
-  
+  value_string = "\n".join(f"{rating['Source']}: {rating['Value']}" for rating in db['Ratings'])  
 
   embed=discord.Embed(title=movieSearch, description= moviePlot, color=0xFF5733)
   imageURL = db["Poster"]
@@ -338,28 +334,38 @@ async def movieQ(ctx, * , movieSearch):
   embed.add_field(name='Ratings', value= value_string, inline=True)
   embed.add_field(name = "Misc details" , value = "Year released: " + db['Year'] + "\nRating: " + db['Rated'], inline= True)
   await ctx.channel.send(embed=embed)
-  pp.pprint(value_string)
-  
+   
   
   #(movieSearch + " Scores: \n"+ "Rotten Tomatoes  score: " + RottenTom_Rating + "\nIMDB score: " + IMDB_Rating + "\nMetaCritic score: " + MetaCritic_Rating
 
-
-@bot.command()
-async def Actor(ctx, * , songname):
-  
-  data_URL = "http://www.songlyrics.com/"
-  response = requests.get(data_URL).json()
-
-  print(response)
 
   #------------------------------LYRICS----------------------------------------#
 @bot.command()
 async def Lyrics(ctx, * , songname):
   
-  data_URL = "http://www.songlyrics.com/"
-  response = requests.get(data_URL).json()
+  search_term = songname
 
-  print(response)
+  genius_search_url = f"http://api.genius.com/search?q={search_term}&access_token={client_access_token}"
+
+  response = requests.get(genius_search_url)
+  json_data = response.json()
+
+
+  
+  with open ("Artist_Query.json", "w") as f:
+    json.dump ( json_data, f)
+  
+  
+  f = open('Artist_Query.json', 'r')  
+  db = json.load(f)
+  json_data['response']['hits'][0]
+  
+  for song in json_data['response']['hits']:
+    print(song['result']['full_title'], song['result']['stats'])
+  
+      
+    #KOgmt4ELM3VC7D598oXLBwFVcdNxyP7aihveOI41Cin7wn-Ge_qbeywI0ROSsMRa
+  
 
 
 bot.load_extension("cogs.ping")
