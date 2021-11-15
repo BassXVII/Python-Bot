@@ -231,10 +231,9 @@ async def rps(ctx, * , args):
 
 
   
-
+#Prints details to the Rock paper lizard spock game and outputs in embedded format.
 @bot.command()
 async def rpsInfo(self):
-
   embed=discord.Embed(title="RPSLS Rules", description="Here are the rules: \n\nScissors cuts paper, paper covers rock, rock crushes lizard, lizard poisons Spock, Spock smashes scissors, scissors decapitates lizard, lizard eats paper, paper disproves Spock, Spock vaporizes rock, and as it always has, rock crushes scissors.", color=0xFF5733)
 
   file = discord.File("imgs/RPSLS.png")
@@ -244,7 +243,7 @@ async def rpsInfo(self):
   await self.send(file = file, embed=embed)
  
 
-
+#Clears the chat 25 messages. 
 @bot.command()
 async def clear(ctx, amount=25):
   await ctx.channel.purge(limit=amount)
@@ -252,13 +251,16 @@ async def clear(ctx, amount=25):
   embed.set_author(name = "Ya Boi Snakey", url = "https://discord.com/developers/applications/819659006268276796/information", icon_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/2048px-Python-logo-notext.svg.png")
   await ctx.channel.send(embed=embed)  
 
-#all MC commands
+
+
+#Sets a IP to be able to be pinged later with the .pingmc command. Basically stores a minecraft IP with this stored value so that it can be pinged. 
 @bot.command()
 async def setIP(ctx, ip):
   global IP 
   IP = ip
   await ctx.channel.send("Snakey set the MC server IP to " + ip)  
 
+#MC command to see if server is up or not. USed alongside with setIP.
 @bot.command()
 async def pingmc(ctx, port):
   
@@ -275,6 +277,7 @@ async def pingmc(ctx, port):
     await ctx.channel.send("Server is temporarily down. Please contact your server administrator and tell him to get on it")
   sock.close()
 
+#see what members the bot picks up in the current server. Gets all user id's.
 @bot.command()
 async def mem(ctx):
   f= open("membersList.txt","w+")
@@ -283,6 +286,7 @@ async def mem(ctx):
         f.write(member.name + "\n")
     f.close()
 
+#see is a member is part of guild. Can also use .mem command
 @bot.command()
 async def isMem(ctx, memb):
   with open('membersList.txt') as f:
@@ -295,7 +299,7 @@ async def isMem(ctx, memb):
 
 
 #------------------------------------------------#
-
+#Moive query command to get some info from movies.
 @bot.command()
 async def movieQ(ctx, * , movieSearch):
   data_URL = 'http://www.omdbapi.com/?apikey='+apiKey
@@ -312,28 +316,32 @@ async def movieQ(ctx, * , movieSearch):
       
 }
   response = requests.get(data_URL,params=params).json()
-  #pp.pprint(response)
-  
-
+ 
+  #Opens a file to read the response from in json format. 
   with open ("Movie.json", "w") as f:
-    json.dump ( response, f)
+    json.dump (response, f)
 
+  #read file contents and store in a dict.
   f = open('Movie.json', 'r')
   db = json.load(f)
 
-  moviePlot = db["Plot"]
+  if db['Response'] == 'False':
+    await ctx.channel.send("Movie not found, please re-enter the movie title.")
+  else:
+
+    moviePlot = db["Plot"]
  
-  value_string = "\n".join(f"{rating['Source']}: {rating['Value']}" for rating in db['Ratings'])  
+    value_string = "\n".join(f"{rating['Source']}: {rating['Value']}" for rating in db['Ratings'])  
 
-  embed=discord.Embed(title=movieSearch, description= moviePlot, color=0xFF5733)
-  imageURL = db["Poster"]
-  embed.set_image(url=imageURL)  
+    embed=discord.Embed(title=movieSearch, description= moviePlot, color=0xFF5733)
+    imageURL = db["Poster"]
+    embed.set_image(url=imageURL)  
   #e = discord.Embed()
-  embed.set_author(name = "Ya Boi Snakey", url = "https://discord.com/developers/applications/819659006268276796/information", icon_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/2048px-Python-logo-notext.svg.png")
+    embed.set_author(name = "Ya Boi Snakey", url = "https://discord.com/developers/applications/819659006268276796/information", icon_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/2048px-Python-logo-notext.svg.png")
 
-  embed.add_field(name='Ratings', value= value_string, inline=True)
-  embed.add_field(name = "Misc details" , value = "Year released: " + db['Year'] + "\nRating: " + db['Rated'], inline= True)
-  await ctx.channel.send(embed=embed)
+    embed.add_field(name='Ratings', value= value_string, inline=True)
+    embed.add_field(name = "Misc details" , value = "Year released: " + db['Year'] + "\nRating: " + db['Rated'], inline= True)
+    await ctx.channel.send(embed=embed)
    
   
   #(movieSearch + " Scores: \n"+ "Rotten Tomatoes  score: " + RottenTom_Rating + "\nIMDB score: " + IMDB_Rating + "\nMetaCritic score: " + MetaCritic_Rating
