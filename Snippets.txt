@@ -78,3 +78,48 @@ async def Lyrics(ctx, * , songname):
   
       
     #KOgmt4ELM3VC7D598oXLBwFVcdNxyP7aihveOI41Cin7wn-Ge_qbeywI0ROSsMRa
+
+
+
+
+    def seperArgs(arg,delimeter):
+    finalArgs = []
+    toAppend = ''
+    index = 0
+    for i in arg:
+        if(i == delimeter):
+            finalArgs.append(toAppend.strip())
+            toAppend = ''
+        else:
+            toAppend += i
+        if(index == len(arg) - 1):
+            finalArgs.append(toAppend.strip())
+            toAppend = ''
+        index += 1
+    return finalArgs
+
+print(seperArgs('hello my name is -world -land','-'))
+
+#should print: ['hello my name is', 'world', 'land']
+
+
+
+
+
+
+
+
+
+    #Artist_bio = re.sub(r"[\'([{})'\]]", "",Artist_bio )
+    #num_albums = []
+    #Find all albums from artist
+    #albums = soup.findAll('h3', class_ = 'artist-album-label')
+
+    #for i in albums[:int_Value]:
+    #num_albums[] = str(albums)
+
+    #artist_pic = str(x)
+    #with open ("Example.txt", "w") as f:
+    #f.write(headstr)
+    #f.write(pp1)
+    #f.write(soup)
