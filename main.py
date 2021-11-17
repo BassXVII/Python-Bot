@@ -348,32 +348,8 @@ async def movieQ(ctx, * , movieSearch):
 
 
   #------------------------------LYRICS----------------------------------------#
-@bot.command()
-async def Lyrics(ctx, * , songname):
-  
-  search_term = songname
 
-  genius_search_url = f"http://api.genius.com/search?q={search_term}&access_token={client_access_token}"
-
-  response = requests.get(genius_search_url)
-  json_data = response.json()
-
-
-  
-  with open ("Artist_Query.json", "w") as f:
-    json.dump ( json_data, f)
-  
-  
-  f = open('Artist_Query.json', 'r')  
-  db = json.load(f)
-  json_data['response']['hits'][0]
-  
-  for song in json_data['response']['hits']:
-    print(song['result']['full_title'], song['result']['stats'])
-  
-      
-    #KOgmt4ELM3VC7D598oXLBwFVcdNxyP7aihveOI41Cin7wn-Ge_qbeywI0ROSsMRa
-  
+ 
 
 @bot.command()
 async def artist(ctx, artist_query, numQuery):
@@ -384,47 +360,54 @@ async def artist(ctx, artist_query, numQuery):
   soup = BeautifulSoup(page.content, 'lxml')
   title1 = soup.title.text # gets you the text of the <title>(...)</title>
   head = soup.findAll("p",  class_="artist-bio")
-  pp.pprint(head)
-  profile_pic = soup.findAll("div" ,id="featured-artist-avatar")
-  pp1 = str(profile_pic)
-  headstr = str(head)
-  pp.pprint(profile_pic)
- 
-  num_albums = []
-  #Find all albums from artist
-  albums = soup.findAll('h3', class_ = 'artist-album-label')
+  
 
-  for i in albums[:int_Value]:
-    num_albums[i] = str(albums)
-  #x = re.findall(r'(?=src)src=\"(?P<src>[^\[.*?\]+)' , pp1)
+  #get artist profile picture
+  profile_pic = soup.findAll("img" ,class_="artist-thumb")
+  pic_Str = str(profile_pic)
+  p = str(re.findall(r'https[\a-z]*\.png', pic_Str))
+  Artist_pic = re.sub(r"[\'([{})'\]]", "", p)
+
 
   
+
+  
+  Artist_bio = str(head)
+  Artist_bio = re.sub(r"[\'([{})'\]]", "",Artist_bio )
+  #num_albums = []
+  #Find all albums from artist
+  #albums = soup.findAll('h3', class_ = 'artist-album-label')
+
+  #for i in albums[:int_Value]:
+    #num_albums[] = str(albums)
+  
+  
+  
   #artist_pic = str(x)
-  with open ("Example.txt", "w") as f:
+  #with open ("Example.txt", "w") as f:
     #f.write(headstr)
     #f.write(pp1)
-    f.write(num_albums)
-    
+    #f.write(soup)
 
-    
+  with open("Example.txt", "w") as f:
+   f.write(Artist_bio)
+  
+  #Send embedded message in chat
+  embed=discord.Embed(title=artistQ, description=Artist_bio, color=0xFF5733)
 
-    
-    embed=discord.Embed(title=artistQ, description=headstr, color=0xFF5733)
-    #embed.set_image(url=pp1) 
+  embed.set_image(url=Artist_pic) 
     
     
-    await ctx.channel.send(embed=embed)
-  f.close()
+  await ctx.channel.send(embed=embed)
+#f.close()
 
 
 
 bot.load_extension("cogs.ping")
 bot.load_extension("cogs.Purge")
-
 bot.load_extension("cogs.gey")
 bot.load_extension("cogs.phrases")
 bot.load_extension("cogs.rpsInfo")
-
 
 
 keep_alive()

@@ -50,3 +50,31 @@ async def delete(ctx, amount=25):
   #MetaCritic_Rating = db['Ratings'][2]['Value']
 
   #pp.pprint(('\n'.join("{}: {}".format(k, v) for k, v in db.items())))
+
+
+
+@bot.command()
+async def Lyrics(ctx, * , songname):
+  
+  search_term = songname
+
+  genius_search_url = f"http://api.genius.com/search?q={search_term}&access_token={client_access_token}"
+
+  response = requests.get(genius_search_url)
+  json_data = response.json()
+
+
+  
+  with open ("Artist_Query.json", "w") as f:
+    json.dump ( json_data, f)
+  
+  
+  f = open('Artist_Query.json', 'r')  
+  db = json.load(f)
+  json_data['response']['hits'][0]
+  
+  for song in json_data['response']['hits']:
+    print(song['result']['full_title'], song['result']['stats'])
+  
+      
+    #KOgmt4ELM3VC7D598oXLBwFVcdNxyP7aihveOI41Cin7wn-Ge_qbeywI0ROSsMRa
