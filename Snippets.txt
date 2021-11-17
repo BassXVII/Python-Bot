@@ -23,6 +23,8 @@ async def get_userID(user_id):
 
 
 
+(?=src)src=\"(?P<src>[^\[.*?\]+)
+
 @command.commands()
 async def delete(ctx, amount=25):
   await ctx.channel.purge(limit=amount)

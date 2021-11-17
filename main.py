@@ -1,4 +1,4 @@
-import discord, os, logging, datetime, sys, random, socket
+import discord, os, logging, datetime, sys, random, socket, re
 from keep_alive import keep_alive
 from pythonping import ping
 from PIL import Image
@@ -125,7 +125,7 @@ async def on_message(message):
         # Output expected UnboundLocalErrors.
         logger.error(error)
 
- 
+ #Add a song suggestion. | need to add by guild or find a better way to store
 @bot.command()
 async def add(ctx, * , args):
     msg_author = ctx.message.author
@@ -374,6 +374,48 @@ async def Lyrics(ctx, * , songname):
       
     #KOgmt4ELM3VC7D598oXLBwFVcdNxyP7aihveOI41Cin7wn-Ge_qbeywI0ROSsMRa
   
+
+@bot.command()
+async def artist(ctx, artist_query, numQuery):
+
+  int_Value = int(numQuery)
+  artistQ = artist_query
+  page = requests.get("https://www.lyrics.com/artist/" + artistQ)
+  soup = BeautifulSoup(page.content, 'lxml')
+  title1 = soup.title.text # gets you the text of the <title>(...)</title>
+  head = soup.findAll("p",  class_="artist-bio")
+  pp.pprint(head)
+  profile_pic = soup.findAll("div" ,id="featured-artist-avatar")
+  pp1 = str(profile_pic)
+  headstr = str(head)
+  pp.pprint(profile_pic)
+ 
+  num_albums = []
+  #Find all albums from artist
+  albums = soup.findAll('h3', class_ = 'artist-album-label')
+
+  for i in albums[:int_Value]:
+    num_albums[i] = str(albums)
+  #x = re.findall(r'(?=src)src=\"(?P<src>[^\[.*?\]+)' , pp1)
+
+  
+  #artist_pic = str(x)
+  with open ("Example.txt", "w") as f:
+    #f.write(headstr)
+    #f.write(pp1)
+    f.write(num_albums)
+    
+
+    
+
+    
+    embed=discord.Embed(title=artistQ, description=headstr, color=0xFF5733)
+    #embed.set_image(url=pp1) 
+    
+    
+    await ctx.channel.send(embed=embed)
+  f.close()
+
 
 
 bot.load_extension("cogs.ping")
