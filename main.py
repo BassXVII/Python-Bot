@@ -421,22 +421,41 @@ async def artist(ctx, *, artist_query):
     Artist_pic = re.sub(r'[\"([{})\]]', "", p)
     Artist_pic1 =  Artist_pic.strip('\'')
     
-    #Get info about artist
+
+    #-------------------------------Get info about artist---------------------------------------#
     head = soup.findAll("p", class_="artist-bio")
     Artist_bio = str(head)
     b = str(re.findall(r">(.{1,})<", Artist_bio))
     Bio = re.sub(r"[\'([{})'\]]", " ", b)
 
 
+    #Testing out what values i get in  text value so i kno wwhat to look for 
     with open("Example.txt", "w") as f:
         f.write(Bio + "\n")
         f.write(Artist_pic1)
 
-    #Send embedded message in chat
-    embed = discord.Embed(title=artistQ, description=Bio, color=0xFF5733)
 
+    #--------------------------------get artist int value for query--------------------------------#
+  #<h3><a href="artist/Eminem/347307">Famous lyrics by&nbsp;&raquo;</a></h3></hgroup>
+    artistVal = soup.findAll("h1", class_="artist")
+    artistNum = str(artistVal)
+    print(artistNum)
+    n = str(re.findall(r'(/[0-9]*)\"', artistNum))
+    print(n)
+    
+    Anum1 = str(re.sub(r"[^0-9]*", "", n))
+    print(Anum1)
+    #ANum = str(re.findall(r'([0-9]{6})', Anum1))
+
+    #print(ANum)
+
+    
+    
+    #<h1 class="artist"
+
+    #Send embedded message in chat
+    embed = discord.Embed(title=artistQ, description=Bio, color=0x00ffbf)
     imageURL = str(Artist_pic1) 
-    print(imageURL)
     embed.set_image(url=imageURL)
 
     await ctx.channel.send(embed=embed)
