@@ -123,3 +123,15 @@ print(seperArgs('hello my name is -world -land','-'))
     #f.write(headstr)
     #f.write(pp1)
     #f.write(soup)
+
+
+
+
+
+
+  def lyrics_page(artists, number):
+  final_Url =  requests.get("https://www.lyrics.com/artist/" + str(artists) + str(number))
+  soup2 = BeautifulSoup(final_Url.content, 'lxml')
+  
+  with open("Example2.txt", "w") as f:
+      f.write(soup2, f)

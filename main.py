@@ -174,7 +174,7 @@ async def SuggestedList(ctx):
 @bot.command()
 async def info(ctx):
     await ctx.channel.send(
-        "Hi there, im Snakey. Im written in python. Im here to mainly keep track of songs we have played. For beginners, each command is case sensitive, an dmost require a .before them. IDk, im working on fixing that. Most of the commands you can figure out. Im getting kinda high :)"
+        "Hi there, im Snakey. Im written in python. Im here to mainly keep track of songs we have played. For beginners, each command is case sensitive, and most require a period (.) before them. IDk, im working on fixing that. Most of the commands you can figure out. Im getting kinda high :)"
     )
 
 
@@ -405,8 +405,10 @@ async def movieQ(ctx, *, movieSearch):
     #------------------------------Artist Info----------------------------------------#
 
 
+
+
 @bot.command()
-async def artist(ctx, *, artist_query):
+async def artist(ctx, *artist_query):
 
     #int_Value = int(numQuery)
     artistQ = artist_query
@@ -445,13 +447,16 @@ async def artist(ctx, *, artist_query):
     
     Anum1 = str(re.sub(r"[^0-9]*", "", n))
     print(Anum1)
-    #ANum = str(re.findall(r'([0-9]{6})', Anum1))
-
-    #print(ANum)
-
     
-    
-    #<h1 class="artist"
+
+    #lyrics = requests.get("https://www.lyrics.com/artist/" + str(artistQ) + str(Anum1))
+    #soup2 = BeautifulSoup(lyrics.content, 'lxml')
+    #print(lyrics)
+
+    #with open("Example.txt", "w") as f:
+     #   f.write(soup2, f)
+
+    #lyrics_page (artistQ, Anum1)
 
     #Send embedded message in chat
     embed = discord.Embed(title=artistQ, description=Bio, color=0x00ffbf)
@@ -459,6 +464,8 @@ async def artist(ctx, *, artist_query):
     embed.set_image(url=imageURL)
 
     await ctx.channel.send(embed=embed)
+
+
 
 
 #f.close()
