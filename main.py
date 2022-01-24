@@ -236,10 +236,15 @@ async def artist(ctx, *, artist_query):
 
     #int_Value = int(numQuery)
     artistQ = artist_query
-    Urls = ["https://www.lyrics.com/artist/" ]
-    for url in Urls:
-      page = requests.get(url +artistQ)
+    page = requests.get("https://www.lyrics.com/artist/" + artistQ)
+      
+    if page.status_code == 200:
+      print("Website is up")
+    else:
+      page = requests.get("https://www.lyrics.com/sub-artist/" +artistQ)
       print(page)
+
+
     soup = BeautifulSoup(page.content, 'lxml')
     title1 = soup.title.text  # gets you the text of the <title>(...)</title>
 
@@ -254,27 +259,39 @@ async def artist(ctx, *, artist_query):
     #-------------------------------Get info about artist---------------------------------------#
     head = soup.findAll("p",  class_="artist-bio")
     Artist_bio = str(head)
-    print(Artist_bio)
-    b = str(re.findall(r">(.{1,})<", Artist_bio))
-    Bio = re.sub(r"[\'([{})'\]]", " ", b)
+    if head == []:
+      embed = discord.Embed(title=artistQ, description="Sorry, No artist found. Please search again", color=0x00ffbf)
+      imageURL = "https://data.whicdn.com/images/328319171/original.jpg" 
+      embed.set_image(url=imageURL)
+      await ctx.channel.send(embed=embed)
+      
+    else:    
+      print("Bio: " + Artist_bio)
+      b = str(re.findall(r">(.{1,})<",  Artist_bio, flags= re.S))
+      Bio = re.sub(r"[\'([{})'\]]", " ", b)
+      print("Bio2: " + Bio)
+    
+      embed = discord.Embed(title=artistQ, description=Bio, color=0x00ffbf)
+      imageURL = str(Artist_pic1) 
+      embed.set_image(url=imageURL)
+
+      await ctx.channel.send(embed=embed)
 
 
     #Testing out what values i get in  text value so i kno wwhat to look for 
-    with open("Example.txt", "w") as f:
-        f.write(Bio + "\n")
-        f.write(Artist_pic1)
+    #with open("Example.txt", "w") as f:
+        #f.write(Bio + "\n")
+       # f.write(Artist_pic1)
 
 
     #--------------------------------get artist int value for query--------------------------------#
   #<h3><a href="artist/Eminem/347307">Famous lyrics by&nbsp;&raquo;</a></h3></hgroup>
     artistVal = soup.findAll("h1", class_="artist")
     artistNum = str(artistVal)
-    print(artistNum)
     n = str(re.findall(r'(/[0-9]*)\"', artistNum))
-    print(n)
     
     Anum1 = str(re.sub(r"[^0-9]*", "", n))
-    print(Anum1)
+    print("Anum: " + Anum1)
     #ANum = str(re.findall(r'([0-9]{6})', Anum1))
    
   #---------------------------------------get artist albums-----------------------------------------#
@@ -285,14 +302,10 @@ async def artist(ctx, *, artist_query):
 
     with open("Album.txt", "w") as f:
         f.write(album_list + "\n\n\n")
-        f.write(Bio)
+        #f.write(Bio)
 
     #Send embedded message in chat
-    embed = discord.Embed(title=artistQ, description=Bio, color=0x00ffbf)
-    imageURL = str(Artist_pic1) 
-    embed.set_image(url=imageURL)
-
-    await ctx.channel.send(embed=embed)
+    
 
 
 #f.close()
@@ -305,3 +318,15 @@ bot.load_extension("cogs.rpsInfo")
 
 keep_alive()
 bot.run(os.getenv('TOKEN'))
+
+
+#https://stackoverflow.com/questions/41334058/soup-findall-return-null-for-div-class-attribute-beautifulsoup
+
+
+
+#page = requests.get("https://www.lyrics.com/sub-artist/" +artistQ)
+      #soup = BeautifulSoup(page.content, 'lxml')
+      #print(page)
+      #head = soup.findAll("p",  class_="artist-bio")
+      #b = str(re.findall(r">(.{1,})<", Artist_bio))
+      #Bio = re.sub(r"[\'([{})'\]]", " ", b)
