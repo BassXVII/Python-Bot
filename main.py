@@ -73,50 +73,10 @@ async def on_message(message):
         if message.content.startswith('.Ping'):
             await message.channel.send('Pong!')
 
-        if (message.author.id == 369208607126061057):
-            embeds = message.embeds  # return list of embeds
-            for embed in embeds:
-                print(embed.to_dict())  # it's content of embed in dict
-                Des = embed.description
-                #Getting substring from description
-                Bracket1 = "["
-                Bracket2 = "]"
-
-                indx1 = Des.index(Bracket1)
-                indx2 = Des.index(Bracket2)
-
-                res = ' '
-                for idx in range(indx1 + len(Bracket1), indx2):
-                    res = res + Des[idx]
-
-                    #Getting substring from User
-                    Usr = embed.description
-                    carrot1 = "<@"
-                    carrot2 = ">"
-                    indx3 = Usr.index(carrot1)
-                    indx4 = Usr.index(carrot2)
-                    usr = ' '
-
-                    #gets the user name from the description field
-                    for idx in range(indx3 + len(carrot1), indx4):
-                        usr = usr + Usr[idx]
-
-                user_id = int(usr)
-                await get_userID(user_id)
-
-            #get current time
-            e = datetime.datetime.now()
-            date_now = ("%s/%s/%s" % (e.day, e.month, e.year))
-            print("Extracted Data " + res + " requested By " + str(user))
-            with open("SongsFile.txt", "a+") as f:
-                f.write(
-                    str(date_now) + ": " + res + " Requested by: " +
-                    str(user) + "\n")
-
     #Help info
         if message.content.startswith("halp"):
             await message.channel.send(
-                "Current commands: \n .Info\n1.Gey\n2.Purge\n3. .add\n4. .playList\n 5. SuggestedList"
+                "Current commands: \n .Info\n2.Purge\n3. .add\n4. .playList\n 5. SuggestedList"
             )
 
         await bot.process_commands(message)
@@ -126,65 +86,13 @@ async def on_message(message):
         logger.error(error)
 
 
-#Add a song suggestion. | need to add by guild or find a better way to store
-@bot.command()
-async def add(ctx, *, args):
-    msg_author = ctx.message.author
-    e = datetime.datetime.now()
-    date_now = ("%s/%s/%s" % (e.day, e.month, e.year))
-
-    await ctx.channel.send("Snakey added " + args +
-                           " to the suggested songs list :)")
-
-    with open("Suggested.txt", "a+") as f:
-        f.seek(0)
-        data = f.read(100)
-        if len(data) > 0:
-            f.write(
-                str(date_now) + ", " + str(args) + ", added by: " +
-                str(msg_author))
-            f.write("\n")
-            f.write("¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯")
-            f.write("\n")
-
-
-#commands to get embedded lists of song lists
-@bot.command()
-async def playList(ctx):
-    file = open("SongsFile.txt")
-    content = file.read()
-    embed: discord.Embed = discord.Embed(title="Public Play List",
-                                         description=content,
-                                         color=0xF1C40F)
-    await ctx.channel.send(embed=embed)
-
-
-#Embedded list of suggested songs
-@bot.command()
-async def SuggestedList(ctx):
-    file = open("Suggested.txt")
-    content = file.read()
-    embed: discord.Embed = discord.Embed(title="Suggested songs to play",
-                                         description=content,
-                                         color=0xF1C40F)
-    await ctx.channel.send(embed=embed)
-
 
 #Info command
 @bot.command()
 async def info(ctx):
     await ctx.channel.send(
-        "Hi there, im Snakey. Im written in python. Im here to mainly keep track of songs we have played. For beginners, each command is case sensitive, and most require a period (.) before them. IDk, im working on fixing that. Most of the commands you can figure out. Im getting kinda high :)"
+        "Hi there, im Snakey. Im written in python. Im here to mainly keep track of songs we have played. For beginners, each command is case sensitive, an dmost require a .before them. IDk, im working on fixing that. Most of the commands you can figure out. Im getting kinda high :)"
     )
-
-
-#@slash.slash(
-# name = "Info",
-# description = "Who am i? Who U?",
-
-#)
-#async def _poo(ctx:SlashContext):
-#  await ctx.send("Hi there, im Snakey. Im written in python. Im here to mainly keep track of songs we have played. For beginners, each command is case sensitive, an dmost require a .before them. IDk, im working on fixing that. Most of the commands you can figure out. Im getting kinda high :)")
 
 
 #Rock paper scissors command
@@ -319,100 +227,19 @@ async def pingmc(ctx, port):
     sock.close()
 
 
-#see what members the bot picks up in the current server. Gets all user id's.
-@bot.command()
-async def mem(ctx):
-    f = open("membersList.txt", "w+")
-    for guild in bot.guilds:
-        for member in guild.members:
-            f.write(member.name + "\n")
-        f.close()
-
-
-#see is a member is part of guild. Can also use .mem command
-@bot.command()
-async def isMem(ctx, memb):
-    with open('membersList.txt') as f:
-        if memb in f.read():
-            print("true")
-        else:
-            print("False")
-
-    f.close()
-
-
-#------------------------------------------------#
-#Moive query command to get some info from movies.
-@bot.command()
-async def movieQ(ctx, *, movieSearch):
-    data_URL = 'http://www.omdbapi.com/?apikey=' + apiKey
-
-    year = ''
-
-    movie = movieSearch
-    params = {
-        't': movie,
-        'type': 'movie',
-        'y': year,
-        'plot': 'full',
-        'tomatoes': 'true'
-    }
-    response = requests.get(data_URL, params=params).json()
-
-    #Opens a file to read the response from in json format.
-    with open("Movie.json", "w") as f:
-        json.dump(response, f)
-
-    #read file contents and store in a dict.
-    f = open('Movie.json', 'r')
-    db = json.load(f)
-
-    if db['Response'] == 'False':
-        await ctx.channel.send(
-            "Movie not found, please re-enter the movie title.")
-    else:
-
-        moviePlot = db["Plot"]
-
-        value_string = "\n".join(f"{rating['Source']}: {rating['Value']}"
-                                 for rating in db['Ratings'])
-
-        embed = discord.Embed(title=movieSearch,
-                              description=moviePlot,
-                              color=0xFF5733)
-        imageURL = db["Poster"]
-        embed.set_image(url=imageURL)
-        #e = discord.Embed()
-        embed.set_author(
-            name="Ya Boi Snakey",
-            url=
-            "https://discord.com/developers/applications/819659006268276796/information",
-            icon_url=
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/2048px-Python-logo-notext.svg.png"
-        )
-
-        embed.add_field(name='Ratings', value=value_string, inline=True)
-        embed.add_field(name="Misc details",
-                        value="Year released: " + db['Year'] + "\nRating: " +
-                        db['Rated'],
-                        inline=True)
-        await ctx.channel.send(embed=embed)
-
-    #(movieSearch + " Scores: \n"+ "Rotten Tomatoes  score: " + RottenTom_Rating + "\nIMDB score: " + IMDB_Rating + "\nMetaCritic score: " + MetaCritic_Rating
-
-
 
     #------------------------------Artist Info----------------------------------------#
-
-
-
+#, "https://www.lyrics.com/sub-artist/"
 
 @bot.command()
-async def artist(ctx, *artist_query):
+async def artist(ctx, *, artist_query):
 
     #int_Value = int(numQuery)
     artistQ = artist_query
-    page = requests.get("https://www.lyrics.com/artist/" + artistQ)
+    Urls = ["https://www.lyrics.com/artist/" ]
+    for url in Urls:
+      page = requests.get(url +artistQ)
+      print(page)
     soup = BeautifulSoup(page.content, 'lxml')
     title1 = soup.title.text  # gets you the text of the <title>(...)</title>
 
@@ -425,8 +252,9 @@ async def artist(ctx, *artist_query):
     
 
     #-------------------------------Get info about artist---------------------------------------#
-    head = soup.findAll("p", class_="artist-bio")
+    head = soup.findAll("p",  class_="artist-bio")
     Artist_bio = str(head)
+    print(Artist_bio)
     b = str(re.findall(r">(.{1,})<", Artist_bio))
     Bio = re.sub(r"[\'([{})'\]]", " ", b)
 
@@ -447,16 +275,17 @@ async def artist(ctx, *artist_query):
     
     Anum1 = str(re.sub(r"[^0-9]*", "", n))
     print(Anum1)
-    
+    #ANum = str(re.findall(r'([0-9]{6})', Anum1))
+   
+  #---------------------------------------get artist albums-----------------------------------------#
+    artist_Album = soup.findAll("h3", class_="artist-album-label")
+    album_list= str(artist_Album)
+    #print(album_list)
 
-    #lyrics = requests.get("https://www.lyrics.com/artist/" + str(artistQ) + str(Anum1))
-    #soup2 = BeautifulSoup(lyrics.content, 'lxml')
-    #print(lyrics)
 
-    #with open("Example.txt", "w") as f:
-     #   f.write(soup2, f)
-
-    #lyrics_page (artistQ, Anum1)
+    with open("Album.txt", "w") as f:
+        f.write(album_list + "\n\n\n")
+        f.write(Bio)
 
     #Send embedded message in chat
     embed = discord.Embed(title=artistQ, description=Bio, color=0x00ffbf)
@@ -464,8 +293,6 @@ async def artist(ctx, *artist_query):
     embed.set_image(url=imageURL)
 
     await ctx.channel.send(embed=embed)
-
-
 
 
 #f.close()

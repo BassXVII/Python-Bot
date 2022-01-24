@@ -104,12 +104,6 @@ print(seperArgs('hello my name is -world -land','-'))
 
 
 
-
-
-
-
-
-
     #Artist_bio = re.sub(r"[\'([{})'\]]", "",Artist_bio )
     #num_albums = []
     #Find all albums from artist
@@ -126,12 +120,117 @@ print(seperArgs('hello my name is -world -land','-'))
 
 
 
+-----------------------------Old functions----------------------------------
+
+#get current time
+            e = datetime.datetime.now()
+            date_now = ("%s/%s/%s" % (e.day, e.month, e.year))
+            print("Extracted Data " + res + " requested By " + str(user))
+            with open("SongsFile.txt", "a+") as f:
+                f.write(
+                    str(date_now) + ": " + res + " Requested by: " +
+                    str(user) + "\n")
+
+
+@bot.command()
+async def add(ctx, *, args):
+    msg_author = ctx.message.author
+    e = datetime.datetime.now()
+    date_now = ("%s/%s/%s" % (e.day, e.month, e.year))
+
+    await ctx.channel.send("Snakey added " + args +
+                           " to the suggested songs list :)")
+
+    with open("Suggested.txt", "a+") as f:
+        f.seek(0)
+        data = f.read(100)
+        if len(data) > 0:
+            f.write(
+                str(date_now) + ", " + str(args) + ", added by: " +
+                str(msg_author))
+            f.write("\n")
+            f.write("¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯")
+            f.write("\n")
+
+
+#see what members the bot picks up in the current server. Gets all user id's.
+@bot.command()
+async def mem(ctx):
+    f = open("membersList.txt", "w+")
+    for guild in bot.guilds:
+        for member in guild.members:
+            f.write(member.name + "\n")
+        f.close()
+
+
+#see is a member is part of guild. Can also use .mem command
+@bot.command()
+async def isMem(ctx, memb):
+    with open('membersList.txt') as f:
+        if memb in f.read():
+            print("true")
+        else:
+            print("False")
+
+    f.close()
 
 
 
-  def lyrics_page(artists, number):
-  final_Url =  requests.get("https://www.lyrics.com/artist/" + str(artists) + str(number))
-  soup2 = BeautifulSoup(final_Url.content, 'lxml')
-  
-  with open("Example2.txt", "w") as f:
-      f.write(soup2, f)
+#------------------------------------------------#
+#Moive query command to get some info from movies.
+@bot.command()
+async def movieQ(ctx, *, movieSearch):
+    data_URL = 'http://www.omdbapi.com/?apikey=' + apiKey
+
+    year = ''
+
+    movie = movieSearch
+    params = {
+        't': movie,
+        'type': 'movie',
+        'y': year,
+        'plot': 'full',
+        'tomatoes': 'true'
+    }
+    response = requests.get(data_URL, params=params).json()
+
+    #Opens a file to read the response from in json format.
+    with open("Movie.json", "w") as f:
+        json.dump(response, f)
+
+    #read file contents and store in a dict.
+    f = open('Movie.json', 'r')
+    db = json.load(f)
+
+    if db['Response'] == 'False':
+        await ctx.channel.send(
+            "Movie not found, please re-enter the movie title.")
+    else:
+
+        moviePlot = db["Plot"]
+
+        value_string = "\n".join(f"{rating['Source']}: {rating['Value']}"
+                                 for rating in db['Ratings'])
+
+        embed = discord.Embed(title=movieSearch,
+                              description=moviePlot,
+                              color=0xFF5733)
+        imageURL = db["Poster"]
+        embed.set_image(url=imageURL)
+        #e = discord.Embed()
+        embed.set_author(
+            name="Ya Boi Snakey",
+            url=
+            "https://discord.com/developers/applications/819659006268276796/information",
+            icon_url=
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/2048px-Python-logo-notext.svg.png"
+        )
+
+        embed.add_field(name='Ratings', value=value_string, inline=True)
+        embed.add_field(name="Misc details",
+                        value="Year released: " + db['Year'] + "\nRating: " +
+                        db['Rated'],
+                        inline=True)
+        await ctx.channel.send(embed=embed)
+
+    #(movieSearch + " Scores: \n"+ "Rotten Tomatoes  score: " + RottenTom_Rating + "\nIMDB score: " + IMDB_Rating + "\nMetaCritic score: " + MetaCritic_Rating
