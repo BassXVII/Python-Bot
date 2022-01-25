@@ -91,7 +91,7 @@ async def on_message(message):
 @bot.command()
 async def info(ctx):
     await ctx.channel.send(
-        "Hi there, im Snakey. Im written in python. Im here to mainly keep track of songs we have played. For beginners, each command is case sensitive, an dmost require a .before them. IDk, im working on fixing that. Most of the commands you can figure out. Im getting kinda high :)"
+        "Hi there, im Snakey. Im written in python. Im here to mainly keep track of songs we have played. For beginners, each command is case sensitive, and most require a .before them. IDk, im working on fixing that. Most of the commands you can figure out. Im getting kinda high :)"
     )
 
 
@@ -237,27 +237,23 @@ async def artist(ctx, *, artist_query):
     #int_Value = int(numQuery)
     artistQ = artist_query
     page = requests.get("https://www.lyrics.com/artist/" + artistQ)
-    print(page.status_code)
+    #print(page.status_code)
     soup = BeautifulSoup(page.content, 'lxml')
 
 
     #pattern for determining if there is an artist by the users requested FileNotFoundError
     pattern = "We couldn't find any artists matching your query."
 
-    avail_artist = soup.findAll("h4", string = pattern)
-    print (avail_artist)
-    print(page)
-    
-    
-    if avail_artist == True:
-      print("Website is up")
+    #avail_artist = soup.findAll("h4", string = pattern)
+    avail =  soup.find(string=re.compile(pattern))
+    #print(avail)
+
+    if(avail == pattern):
+      #await ctx.channel.send("This artist doesnt exist.") 
+      print("This artist doesnt exist.")
     else:
-      page = requests.get("https://www.lyrics.com/sub-artist/" +artistQ)
-      print(page)
-
-
-    
-    #title1 = soup.title.text  # gets you the text of the <title>(...)</title>
+     # page = requests.get("https://www.lyrics.com/sub-artist/" +artistQ)
+     # print(page)
 
     #get artist profile picture
     profile_pic = soup.findAll("img", class_="artist-thumb")
