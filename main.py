@@ -228,7 +228,7 @@ async def pingmc(ctx, port):
 
 
 
-    #------------------------------Artist Info----------------------------------------#
+#------------------------------Artist Info----------------------------------------#
 #, "https://www.lyrics.com/sub-artist/"
 
 @bot.command()
@@ -237,16 +237,27 @@ async def artist(ctx, *, artist_query):
     #int_Value = int(numQuery)
     artistQ = artist_query
     page = requests.get("https://www.lyrics.com/artist/" + artistQ)
-      
-    if page.status_code == 200:
+    print(page.status_code)
+    soup = BeautifulSoup(page.content, 'lxml')
+
+
+    #pattern for determining if there is an artist by the users requested FileNotFoundError
+    pattern = "We couldn't find any artists matching your query."
+
+    avail_artist = soup.findAll("h4", string = pattern)
+    print (avail_artist)
+    print(page)
+    
+    
+    if avail_artist == True:
       print("Website is up")
     else:
       page = requests.get("https://www.lyrics.com/sub-artist/" +artistQ)
       print(page)
 
 
-    soup = BeautifulSoup(page.content, 'lxml')
-    title1 = soup.title.text  # gets you the text of the <title>(...)</title>
+    
+    #title1 = soup.title.text  # gets you the text of the <title>(...)</title>
 
     #get artist profile picture
     profile_pic = soup.findAll("img", class_="artist-thumb")
@@ -260,14 +271,14 @@ async def artist(ctx, *, artist_query):
     head = soup.findAll("p",  class_="artist-bio")
     Artist_bio = str(head)
     if head == []:
-      embed = discord.Embed(title=artistQ, description="Sorry, No artist found. Please search again", color=0x00ffbf)
+      embed = discord.Embed(title=artistQ, description="D'Oh, no artist found. Please search again", color=0x00ffbf)
       imageURL = "https://data.whicdn.com/images/328319171/original.jpg" 
       embed.set_image(url=imageURL)
       await ctx.channel.send(embed=embed)
       
     else:    
       print("Bio: " + Artist_bio)
-      b = str(re.findall(r">(.{1,})<",  Artist_bio, flags= re.S))
+      b = str(re.findall(r">(.{1,})<",  Artist_bio, flags= re.S)) # re.S flag for newline spaces i believe.
       Bio = re.sub(r"[\'([{})'\]]", " ", b)
       print("Bio2: " + Bio)
     
