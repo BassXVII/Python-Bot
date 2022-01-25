@@ -250,36 +250,28 @@ async def artist(ctx, *, artist_query):
 
     if(avail == pattern):
       #await ctx.channel.send("This artist doesnt exist.") 
-      print("This artist doesnt exist.")
-    else:
-     # page = requests.get("https://www.lyrics.com/sub-artist/" +artistQ)
-     # print(page)
-
-    #get artist profile picture
-    profile_pic = soup.findAll("img", class_="artist-thumb")
-    pic_Str = str(profile_pic)
-    p = str(re.findall(r"(https.{1,})title", pic_Str))
-    Artist_pic = re.sub(r'[\"([{})\]]', "", p)
-    Artist_pic1 =  Artist_pic.strip('\'')
-    
-
-    #-------------------------------Get info about artist---------------------------------------#
-    head = soup.findAll("p",  class_="artist-bio")
-    Artist_bio = str(head)
-    if head == []:
       embed = discord.Embed(title=artistQ, description="D'Oh, no artist found. Please search again", color=0x00ffbf)
       imageURL = "https://data.whicdn.com/images/328319171/original.jpg" 
       embed.set_image(url=imageURL)
       await ctx.channel.send(embed=embed)
-      
-    else:    
-      print("Bio: " + Artist_bio)
+    else:
+      #get artist profile picture
+      profile_pic = soup.findAll("img", class_="artist-thumb")
+      print(profile_pic)
+      pic_Str = str(profile_pic)
+      p = str(re.findall(r"(https.{1,})title", pic_Str))
+      Artist_pic = re.sub(r'[\"([{})\]]', "", p)
+      Artist_pic1 =  Artist_pic.strip('\'')
+    
+
+    #-------------------------------Get info about artist---------------------------------------#
+      head = soup.findAll("p",  class_="artist-bio")
+      Artist_bio = str(head)
       b = str(re.findall(r">(.{1,})<",  Artist_bio, flags= re.S)) # re.S flag for newline spaces i believe.
       Bio = re.sub(r"[\'([{})'\]]", " ", b)
-      print("Bio2: " + Bio)
     
       embed = discord.Embed(title=artistQ, description=Bio, color=0x00ffbf)
-      imageURL = str(Artist_pic1) 
+      imageURL = str(Artist_pic1)
       embed.set_image(url=imageURL)
 
       await ctx.channel.send(embed=embed)
@@ -298,17 +290,17 @@ async def artist(ctx, *, artist_query):
     n = str(re.findall(r'(/[0-9]*)\"', artistNum))
     
     Anum1 = str(re.sub(r"[^0-9]*", "", n))
-    print("Anum: " + Anum1)
+    #print("Anum: " + Anum1)
     #ANum = str(re.findall(r'([0-9]{6})', Anum1))
    
   #---------------------------------------get artist albums-----------------------------------------#
-    artist_Album = soup.findAll("h3", class_="artist-album-label")
-    album_list= str(artist_Album)
+    #artist_Album = soup.findAll("h3", class_="artist-album-label")
+    #album_list= str(artist_Album)
     #print(album_list)
 
 
-    with open("Album.txt", "w") as f:
-        f.write(album_list + "\n\n\n")
+    #with open("Album.txt", "w") as f:
+     #   f.write(album_list + "\n\n\n")
         #f.write(Bio)
 
     #Send embedded message in chat
@@ -337,3 +329,7 @@ bot.run(os.getenv('TOKEN'))
       #head = soup.findAll("p",  class_="artist-bio")
       #b = str(re.findall(r">(.{1,})<", Artist_bio))
       #Bio = re.sub(r"[\'([{})'\]]", " ", b)
+
+
+# page = requests.get("https://www.lyrics.com/sub-artist/" +artistQ)
+     # print(page)
