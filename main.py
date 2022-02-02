@@ -238,7 +238,7 @@ async def artist(ctx, *, artist_query):
     artistQ = artist_query
     page = requests.get("https://www.lyrics.com/artist/" + artistQ)
     #print(page.status_code)
-    soup = BeautifulSoup(page.content, 'lxml')
+    soup = BeautifulSoup(page.content, 'html.parser')
 
 
     #pattern for determining if there is an artist by the users requested FileNotFoundError
@@ -248,33 +248,26 @@ async def artist(ctx, *, artist_query):
     avail =  soup.find(string=re.compile(pattern))
     #print(avail)
 
-    if(avail == pattern):
-      #await ctx.channel.send("This artist doesnt exist.") 
-      embed = discord.Embed(title=artistQ, description="D'Oh, no artist found. Please search again", color=0x00ffbf)
-      imageURL = "https://data.whicdn.com/images/328319171/original.jpg" 
-      embed.set_image(url=imageURL)
-      await ctx.channel.send(embed=embed)
-    else:
-      #get artist profile picture
-      profile_pic = soup.findAll("img", class_="artist-thumb")
-      print(profile_pic)
-      pic_Str = str(profile_pic)
-      p = str(re.findall(r"(https.{1,})title", pic_Str))
-      Artist_pic = re.sub(r'[\"([{})\]]', "", p)
-      Artist_pic1 =  Artist_pic.strip('\'')
+    
+    profile_pic = soup.findAll("img", class_="artist-thumb")
+    pic_Str = str(profile_pic)
+    print(pic_Str)
+    p = str(re.findall(r"(https.{1,})title", pic_Str))
+    Artist_pic = re.sub(r'[\"([{})\]]', "", p)
+    Artist_pic1 =  Artist_pic.strip('\'')
     
 
     #-------------------------------Get info about artist---------------------------------------#
-      head = soup.findAll("p",  class_="artist-bio")
-      Artist_bio = str(head)
-      b = str(re.findall(r">(.{1,})<",  Artist_bio, flags= re.S)) # re.S flag for newline spaces i believe.
-      Bio = re.sub(r"[\'([{})'\]]", " ", b)
+    head = soup.findAll("p",  class_="artist-bio")
+    Artist_bio = str(head)
+    b = str(re.findall(r">(.{1,})<",  Artist_bio, flags= re.S)) # re.S flag for newline spaces i believe.
+    Bio = re.sub(r"[\'([{})'\]]", " ", b)
     
-      embed = discord.Embed(title=artistQ, description=Bio, color=0x00ffbf)
-      imageURL = str(Artist_pic1)
-      embed.set_image(url=imageURL)
+    embed = discord.Embed(title=artistQ, description=Bio, color=0x00ffbf)
+    imageURL = str(Artist_pic1)
+    embed.set_image(url=imageURL)
 
-      await ctx.channel.send(embed=embed)
+    await ctx.channel.send(embed=embed)
 
 
     #Testing out what values i get in  text value so i kno wwhat to look for 
@@ -294,14 +287,30 @@ async def artist(ctx, *, artist_query):
     #ANum = str(re.findall(r'([0-9]{6})', Anum1))
    
   #---------------------------------------get artist albums-----------------------------------------#
-    #artist_Album = soup.findAll("h3", class_="artist-album-label")
-    #album_list= str(artist_Album)
-    #print(album_list)
+
+@bot.command()
+async def album(ctx, *, artist_query):
+
+    artistQ = artist_query
+    page = requests.get("https://www.lyrics.com/artist/" + artistQ)
+    #print(page.status_code)
+    soup = BeautifulSoup(page.content, 'html.parser')
 
 
-    #with open("Album.txt", "w") as f:
-     #   f.write(album_list + "\n\n\n")
-        #f.write(Bio)
+    artist_Album = soup.findAll("h3", class_="artist-album-label")
+    album_list= str(artist_Album)
+    ab = str(re.findall(r'/(.{1,})</a>', album_list))
+    with open("Album.txt", "w") as f:
+      f.write(album_list)
+      
+    
+    
+    
+
+    print(ab)
+
+
+    f.close()
 
     #Send embedded message in chat
     

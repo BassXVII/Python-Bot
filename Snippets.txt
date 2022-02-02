@@ -234,3 +234,22 @@ async def movieQ(ctx, *, movieSearch):
         await ctx.channel.send(embed=embed)
 
     #(movieSearch + " Scores: \n"+ "Rotten Tomatoes  score: " + RottenTom_Rating + "\nIMDB score: " + IMDB_Rating + "\nMetaCritic score: " + MetaCritic_Rating
+
+
+
+      
+      links = []
+      for image_tag in images:
+        links.append(image_tag['src'])
+        print(links)
+
+
+        if(avail == pattern):
+      #await ctx.channel.send("This artist doesnt exist.") 
+      embed = discord.Embed(title=artistQ, description="D'Oh, no artist found. Please search again", color=0x00ffbf)
+      imageURL = "https://data.whicdn.com/images/328319171/original.jpg" 
+      embed.set_image(url=imageURL)
+      await ctx.channel.send(embed=embed)
+    else:
+      print("none")
+      #get artist profile picture
