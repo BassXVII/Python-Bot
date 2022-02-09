@@ -1,3 +1,9 @@
+#genius_client_id = 'CLQVbNC3QwV_yLUqufIS_nJPqyrOpylB69nn6eLQZSIva_AJeE0TIyFQqLvU92sN'
+#genius_secret_id = 'bqIijTDld-eoSr6E5igdhqV4wEBDX5FmzyJQBo3bb-324lBIEDteFaOhaEKH7cd19QucnCY2f3rirTau8D8hAA'
+client_access_token = 'x-Ip1tsZKQcKQQHhsLUAARDtltGp62ujVLz9s_Dqd-Fu4EBhRwMZuclD2UDZkdZ1'
+
+
+
 #Get username from mention
        #member1 = message.mentions[0].id
 

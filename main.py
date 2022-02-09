@@ -3,26 +3,15 @@ from keep_alive import keep_alive
 from pythonping import ping
 from PIL import Image
 import json
+import requests
 from discord.ext import commands
-import pandas as pd
 import urllib.request
 import urllib.parse
-import urllib.error
 from bs4 import BeautifulSoup
-import ssl
-import ast
-
 from urllib.request import Request, urlopen
-#from discord_slash import SlashCommand, SlashContext
-#from discord_slash.utils.manage_commands import create_choice, create_option
-import requests
 from pprint import PrettyPrinter
 
 pp = PrettyPrinter()
-
-#genius_client_id = 'CLQVbNC3QwV_yLUqufIS_nJPqyrOpylB69nn6eLQZSIva_AJeE0TIyFQqLvU92sN'
-#genius_secret_id = 'bqIijTDld-eoSr6E5igdhqV4wEBDX5FmzyJQBo3bb-324lBIEDteFaOhaEKH7cd19QucnCY2f3rirTau8D8hAA'
-client_access_token = 'x-Ip1tsZKQcKQQHhsLUAARDtltGp62ujVLz9s_Dqd-Fu4EBhRwMZuclD2UDZkdZ1'
 
 intents = discord.Intents.default()
 intents.members = True
@@ -232,10 +221,11 @@ async def pingmc(ctx, port):
 #, "https://www.lyrics.com/sub-artist/"
 
 @bot.command()
-async def artist(ctx, *, artist_query):
+async def artist(ctx, *artist_query):
 
     #int_Value = int(numQuery)
     artistQ = artist_query
+    print("Full url: https://www.lyrics.com/" + artist_query[0] + artist_query[1])
     page = requests.get("https://www.lyrics.com/artist/" + artistQ)
     #print(page.status_code)
     soup = BeautifulSoup(page.content, 'html.parser')
@@ -303,9 +293,6 @@ async def album(ctx, *, artist_query):
     with open("Album.txt", "w") as f:
       f.write(album_list)
       
-    
-    
-    
 
     print(ab)
 
@@ -313,11 +300,32 @@ async def album(ctx, *, artist_query):
     f.close()
 
     #Send embedded message in chat
-    
+  
+
+@bot.command()
+async def lyrics(ctx, *, song):
+
+    #int_Value = int(numQuery)
+  songQ = song
+  page = requests.get("https://www.azlyrics.com/lyrics/olivertree/" + songQ + ".html")
+    #print(page.status_code)
+  soup = BeautifulSoup(page.content, 'html.parser')
 
 
+  mydivs =soup.findAll()
+
+
+  
+  for i in mydivs:
+    print(i.string)
 #f.close()
 
+@bot.command()
+async def test_arg(ctx, *args):
+  page = requests.get("https://www.azlyrics.com/lyrics/" + args[0] + "/" + args[1] + ".html")
+    #print(page.status_code)
+  soup = BeautifulSoup(page.content, 'html.parser')
+  print(soup)
 bot.load_extension("cogs.ping")
 bot.load_extension("cogs.Purge")
 bot.load_extension("cogs.gey")
