@@ -307,17 +307,17 @@ async def lyrics(ctx, *, song):
 
     #int_Value = int(numQuery)
   songQ = song
-  page = requests.get("https://www.azlyrics.com/lyrics/olivertree/" + songQ + ".html")
+  page = requests.get("https://www.azlyrics.com/lyrics/kodakblack" + songQ + ".html")
     #print(page.status_code)
   soup = BeautifulSoup(page.content, 'html.parser')
 
-
-  mydivs =soup.findAll()
+  with open("output.html", "w", encoding = 'utf-8') as file:
+    # prettify the soup object and convert it into a string  
+    file.write(str(soup.prettify()))
 
 
   
-  for i in mydivs:
-    print(i.string)
+  
 #f.close()
 
 @bot.command()
@@ -326,6 +326,13 @@ async def test_arg(ctx, *args):
     #print(page.status_code)
   soup = BeautifulSoup(page.content, 'html.parser')
   print(soup)
+ 
+  info = str(page)
+  with open("Album.txt", "w") as f:
+    f.write(info)
+
+
+    
 bot.load_extension("cogs.ping")
 bot.load_extension("cogs.Purge")
 bot.load_extension("cogs.gey")
