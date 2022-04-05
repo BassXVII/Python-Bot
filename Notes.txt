@@ -1,5 +1,10 @@
 get song from embed Description to add to playlist. [Songs Played]
 Add song suggestions to Songs file.
-Add user who requested song to song played list and time stamp. 
 Want to add how many times a song has been played. Keep current count with an increment counter and an if loop to see if what is being played matches anything in the list. 
+Add a reaction to messages instead of replies
+
+
+Add a drop down list of possible commands when startign out a command with .
+
+
 

@@ -1,0 +1,261 @@
+#genius_client_id = 'CLQVbNC3QwV_yLUqufIS_nJPqyrOpylB69nn6eLQZSIva_AJeE0TIyFQqLvU92sN'
+#genius_secret_id = 'bqIijTDld-eoSr6E5igdhqV4wEBDX5FmzyJQBo3bb-324lBIEDteFaOhaEKH7cd19QucnCY2f3rirTau8D8hAA'
+client_access_token = 'x-Ip1tsZKQcKQQHhsLUAARDtltGp62ujVLz9s_Dqd-Fu4EBhRwMZuclD2UDZkdZ1'
+
+
+
+#Get username from mention
+       #member1 = message.mentions[0].id
+
+       #print("Extracted Data " + res + " requested By " + str(member1))
+
+       SOng
+
+
+#@bot.command()
+#async def Purge(ctx, * , args):
+#      await ctx.channel.purge(limit=args)
+#     await ctx.channel.send("Snakey cleared away 30 messages")
+
+
+#get user id
+
+async def get_userID(user_id): 
+   # renamed id to user_id to make it more readable
+ global user 
+ user= bot.get_user(user_id)
+ print(user)
+ return (user)
+
+
+
+(?=src)src=\"(?P<src>[^\[.*?\]+)
+
+@command.commands()
+async def delete(ctx, amount=25):
+  await ctx.channel.purge(limit=amount)
+  await ctx.channel.send("Snakey deleted 25 previous messages!")
+
+
+
+  async def movieQ(ctx, * , movieSearch):
+  movieSearched = movieSearch
+  movies = ia.search_movie(movieSearched)
+  movieResults = str(movies[0])
+  await ctx.channel.send(movieResults)
+  print(movies)
+
+   for key in book:
+	print(key, book[key])
+
+
+
+  #not all movies have all scores. You will have to do a for loop to scan every query
+  #IMDB_Rating = db['Ratings'][0]['Value']
+  #RottenTom_Rating = db['Ratings'][1]['Value']
+  #MetaCritic_Rating = db['Ratings'][2]['Value']
+
+  #pp.pprint(('\n'.join("{}: {}".format(k, v) for k, v in db.items())))
+
+
+
+@bot.command()
+async def Lyrics(ctx, * , songname):
+  
+  search_term = songname
+
+  genius_search_url = f"http://api.genius.com/search?q={search_term}&access_token={client_access_token}"
+
+  response = requests.get(genius_search_url)
+  json_data = response.json()
+
+
+  
+  with open ("Artist_Query.json", "w") as f:
+    json.dump ( json_data, f)
+  
+  
+  f = open('Artist_Query.json', 'r')  
+  db = json.load(f)
+  json_data['response']['hits'][0]
+  
+  for song in json_data['response']['hits']:
+    print(song['result']['full_title'], song['result']['stats'])
+  
+      
+    #KOgmt4ELM3VC7D598oXLBwFVcdNxyP7aihveOI41Cin7wn-Ge_qbeywI0ROSsMRa
+
+
+
+
+    def seperArgs(arg,delimeter):
+    finalArgs = []
+    toAppend = ''
+    index = 0
+    for i in arg:
+        if(i == delimeter):
+            finalArgs.append(toAppend.strip())
+            toAppend = ''
+        else:
+            toAppend += i
+        if(index == len(arg) - 1):
+            finalArgs.append(toAppend.strip())
+            toAppend = ''
+        index += 1
+    return finalArgs
+
+print(seperArgs('hello my name is -world -land','-'))
+
+#should print: ['hello my name is', 'world', 'land']
+
+
+
+    #Artist_bio = re.sub(r"[\'([{})'\]]", "",Artist_bio )
+    #num_albums = []
+    #Find all albums from artist
+    #albums = soup.findAll('h3', class_ = 'artist-album-label')
+
+    #for i in albums[:int_Value]:
+    #num_albums[] = str(albums)
+
+    #artist_pic = str(x)
+    #with open ("Example.txt", "w") as f:
+    #f.write(headstr)
+    #f.write(pp1)
+    #f.write(soup)
+
+
+
+-----------------------------Old functions----------------------------------
+
+#get current time
+            e = datetime.datetime.now()
+            date_now = ("%s/%s/%s" % (e.day, e.month, e.year))
+            print("Extracted Data " + res + " requested By " + str(user))
+            with open("SongsFile.txt", "a+") as f:
+                f.write(
+                    str(date_now) + ": " + res + " Requested by: " +
+                    str(user) + "\n")
+
+
+@bot.command()
+async def add(ctx, *, args):
+    msg_author = ctx.message.author
+    e = datetime.datetime.now()
+    date_now = ("%s/%s/%s" % (e.day, e.month, e.year))
+
+    await ctx.channel.send("Snakey added " + args +
+                           " to the suggested songs list :)")
+
+    with open("Suggested.txt", "a+") as f:
+        f.seek(0)
+        data = f.read(100)
+        if len(data) > 0:
+            f.write(
+                str(date_now) + ", " + str(args) + ", added by: " +
+                str(msg_author))
+            f.write("\n")
+            f.write("¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯")
+            f.write("\n")
+
+
+#see what members the bot picks up in the current server. Gets all user id's.
+@bot.command()
+async def mem(ctx):
+    f = open("membersList.txt", "w+")
+    for guild in bot.guilds:
+        for member in guild.members:
+            f.write(member.name + "\n")
+        f.close()
+
+
+#see is a member is part of guild. Can also use .mem command
+@bot.command()
+async def isMem(ctx, memb):
+    with open('membersList.txt') as f:
+        if memb in f.read():
+            print("true")
+        else:
+            print("False")
+
+    f.close()
+
+
+
+#------------------------------------------------#
+#Moive query command to get some info from movies.
+@bot.command()
+async def movieQ(ctx, *, movieSearch):
+    data_URL = 'http://www.omdbapi.com/?apikey=' + apiKey
+
+    year = ''
+
+    movie = movieSearch
+    params = {
+        't': movie,
+        'type': 'movie',
+        'y': year,
+        'plot': 'full',
+        'tomatoes': 'true'
+    }
+    response = requests.get(data_URL, params=params).json()
+
+    #Opens a file to read the response from in json format.
+    with open("Movie.json", "w") as f:
+        json.dump(response, f)
+
+    #read file contents and store in a dict.
+    f = open('Movie.json', 'r')
+    db = json.load(f)
+
+    if db['Response'] == 'False':
+        await ctx.channel.send(
+            "Movie not found, please re-enter the movie title.")
+    else:
+
+        moviePlot = db["Plot"]
+
+        value_string = "\n".join(f"{rating['Source']}: {rating['Value']}"
+                                 for rating in db['Ratings'])
+
+        embed = discord.Embed(title=movieSearch,
+                              description=moviePlot,
+                              color=0xFF5733)
+        imageURL = db["Poster"]
+        embed.set_image(url=imageURL)
+        #e = discord.Embed()
+        embed.set_author(
+            name="Ya Boi Snakey",
+            url=
+            "https://discord.com/developers/applications/819659006268276796/information",
+            icon_url=
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/2048px-Python-logo-notext.svg.png"
+        )
+
+        embed.add_field(name='Ratings', value=value_string, inline=True)
+        embed.add_field(name="Misc details",
+                        value="Year released: " + db['Year'] + "\nRating: " +
+                        db['Rated'],
+                        inline=True)
+        await ctx.channel.send(embed=embed)
+
+    #(movieSearch + " Scores: \n"+ "Rotten Tomatoes  score: " + RottenTom_Rating + "\nIMDB score: " + IMDB_Rating + "\nMetaCritic score: " + MetaCritic_Rating
+
+
+
+      
+      links = []
+      for image_tag in images:
+        links.append(image_tag['src'])
+        print(links)
+
+
+        if(avail == pattern):
+      #await ctx.channel.send("This artist doesnt exist.") 
+      embed = discord.Embed(title=artistQ, description="D'Oh, no artist found. Please search again", color=0x00ffbf)
+      imageURL = "https://data.whicdn.com/images/328319171/original.jpg" 
+      embed.set_image(url=imageURL)
+      await ctx.channel.send(embed=embed)
+    else:
+      print("none")
+      #get artist profile picture
