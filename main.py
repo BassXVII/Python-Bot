@@ -252,8 +252,16 @@ async def artist(ctx, *, artist_query):
     Artist_bio = str(head)
     b = str(re.findall(r">(.{1,})<",  Artist_bio, flags= re.S)) # re.S flag for newline spaces i believe.
     Bio = re.sub(r"[\'([{})'\]]", " ", b)
+
+    artist_Album = soup.findAll("h3",limit=6,  class_="artist-album-label")
+    album_list= str(artist_Album)
+    ab = str(re.findall(r"([\’\'!.,\(\)A-Z a-z0-9\w\-\:\+\%\[\]\+\/\;\&]{2,}</a)", album_list))
     
+    #replace the </a with a blank space. 
+    ab1 = str(re.sub(r"</a", "", ab))
+  
     embed = discord.Embed(title=artistQ, description=Bio, color=0x00ffbf)
+    embed.add_field(name="Top Albums", value=ab1, inline=True)
     imageURL = str(Artist_pic1)
     embed.set_image(url=imageURL)
 
@@ -286,9 +294,11 @@ async def album(ctx, *, artist_query):
     soup = BeautifulSoup(page.content, 'html.parser')
 
 
-    artist_Album = soup.findAll("h3", class_="artist-album-label")
+    artist_Album = soup.findAll("h3",limit=30,  class_="artist-album-label")
     album_list= str(artist_Album)
     ab = str(re.findall(r"([\’\'!.,\(\)A-Z a-z0-9\w\-\:\+\%\[\]\+\/\;\&]{2,}</a)", album_list))
+    
+    #replace the </a with a blank space. 
     ab1 = str(re.sub(r"</a", "", ab))
     with open("Album.txt", "w") as f:
       f.write(ab1)
@@ -297,8 +307,13 @@ async def album(ctx, *, artist_query):
       #f.write(album_list) 
     f.close()
 
-    #Send embedded message in chat
   
+    embed = discord.Embed(title=(artist_query + "Top 3 albums"), description=ab1, color=0x00ffbf)
+
+
+    await ctx.channel.send(embed=embed)
+    #Send embedded message in chat
+
 
 
 #----------------------get lyrics for requested song---------------------------#
@@ -314,8 +329,7 @@ async def lyrics(ctx, *, song):
   with open("output.html", "w", encoding = 'utf-8') as file:
     # prettify the soup object and convert it into a string  
     file.write(str(soup.prettify()))
-    file.write("\n")
-    file.write("\n")
+
 
   
   
