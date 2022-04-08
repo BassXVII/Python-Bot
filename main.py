@@ -350,7 +350,6 @@ async def test_arg(ctx, *args):
     
 bot.load_extension("cogs.ping")
 bot.load_extension("cogs.Purge")
-bot.load_extension("cogs.gey")
 bot.load_extension("cogs.phrases")
 bot.load_extension("cogs.rpsInfo")
 
