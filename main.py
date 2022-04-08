@@ -259,7 +259,9 @@ async def artist(ctx, *, artist_query):
     
     #replace the </a with a blank space. 
     ab1 = str(re.sub(r"</a", "", ab))
-  
+
+    if album_list = 
+    
     embed = discord.Embed(title=artistQ, description=Bio, color=0x00ffbf)
     embed.add_field(name="Top Albums", value=ab1, inline=True)
     imageURL = str(Artist_pic1)
