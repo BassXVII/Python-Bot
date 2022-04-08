@@ -221,11 +221,11 @@ async def pingmc(ctx, port):
 #, "https://www.lyrics.com/sub-artist/"
 
 @bot.command()
-async def artist(ctx, *artist_query):
+async def artist(ctx, *, artist_query):
 
     #int_Value = int(numQuery)
     artistQ = artist_query
-    print("Full url: https://www.lyrics.com/" + artist_query[0] + artist_query[1])
+    print("Full url: https://www.lyrics.com/" + artist_query)
     page = requests.get("https://www.lyrics.com/artist/" + artistQ)
     #print(page.status_code)
     soup = BeautifulSoup(page.content, 'html.parser')
