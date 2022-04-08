@@ -275,9 +275,8 @@ async def artist(ctx, *, artist_query):
     Anum1 = str(re.sub(r"[^0-9]*", "", n))
     #print("Anum: " + Anum1)
     #ANum = str(re.findall(r'([0-9]{6})', Anum1))
-   
-  #---------------------------------------get artist albums-----------------------------------------#
 
+#---------------------------get artist albums-------------------------------#
 @bot.command()
 async def album(ctx, *, artist_query):
 
@@ -289,19 +288,20 @@ async def album(ctx, *, artist_query):
 
     artist_Album = soup.findAll("h3", class_="artist-album-label")
     album_list= str(artist_Album)
-    ab = str(re.findall(r'/(.{1,})</a>', album_list))
+    ab = str(re.findall(r"([\’\'!.,\(\)A-Z a-z0-9\w\-\:\+\%\[\]\+\/\;\&]{2,}</a)", album_list))
+    ab1 = str(re.sub(r"</a", "", ab))
     with open("Album.txt", "w") as f:
-      f.write(album_list)
-      
+      f.write(ab1)
 
-    print(ab)
-
-
+    #Write full html for certain album for regex testing purposes
+      #f.write(album_list) 
     f.close()
 
     #Send embedded message in chat
   
 
+
+#----------------------get lyrics for requested song---------------------------#
 @bot.command()
 async def lyrics(ctx, *, song):
 
@@ -314,7 +314,8 @@ async def lyrics(ctx, *, song):
   with open("output.html", "w", encoding = 'utf-8') as file:
     # prettify the soup object and convert it into a string  
     file.write(str(soup.prettify()))
-
+    file.write("\n")
+    file.write("\n")
 
   
   
@@ -330,7 +331,7 @@ async def test_arg(ctx, *args):
   info = str(page)
   with open("Album.txt", "w") as f:
     f.write(info)
-
+    
 
     
 bot.load_extension("cogs.ping")
