@@ -237,6 +237,8 @@ async def artist(ctx, *, artist_query):
     #avail_artist = soup.findAll("h4", string = pattern)
     avail =  soup.find(string=re.compile(pattern))
     #print(avail)
+    
+      #get artist profile picture
 
     
     profile_pic = soup.findAll("img", class_="artist-thumb")
@@ -260,7 +262,14 @@ async def artist(ctx, *, artist_query):
     #replace the </a with a blank space. 
     ab1 = str(re.sub(r"</a", "", ab))
 
-    if album_list = 
+    if(avail == pattern):
+      #await ctx.channel.send("This artist doesnt exist.") 
+      embed = discord.Embed(title=artistQ, description="D'Oh, no artist found. Please search again", color=0x00ffbf)
+      imageURL = "https://data.whicdn.com/images/328319171/original.jpg" 
+      embed.set_image(url=imageURL)
+      await ctx.channel.send(embed=embed)
+    else:
+      print("none")
     
     embed = discord.Embed(title=artistQ, description=Bio, color=0x00ffbf)
     embed.add_field(name="Top Albums", value=ab1, inline=True)
