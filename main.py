@@ -225,18 +225,28 @@ async def artist(ctx, *, artist_query):
 
     #int_Value = int(numQuery)
     artistQ = artist_query
-    print("Full url: https://www.lyrics.com/" + artist_query)
+    #print("Full url: https://www.lyrics.com/" + artist_query)
     page = requests.get("https://www.lyrics.com/artist/" + artistQ)
     #print(page.status_code)
     soup = BeautifulSoup(page.content, 'html.parser')
 
 
     #pattern for determining if there is an artist by the users requested FileNotFoundError
-    pattern = "We couldn't find any artists matching your query."
-
-    #avail_artist = soup.findAll("h4", string = pattern)
-    avail =  soup.find(string=re.compile(pattern))
-    #print(avail)
+    
+  #Regex pattern for finding how many artsts there are:
+  # r"(Yee yee! We've found <strong>[0-9]{2,}<\/strong> artists matching <strong>[A-za-z0-9 -!.]{2,}<\/strong>)"
+  
+    #pattern = "We couldn't find any artists matching your query."
+    
+    
+    artistAvail = str(soup)
+    #print(artistAvail)
+    avail =  re.search(r"(Yee yee! We've found <strong>[0-9]{2,}<\/strong> artists matching <strong>[A-za-z0-9 -!.]{2,}<\/strong>)", artistAvail)
+    if avail:
+      print(avail)
+    else: 
+      print ("Go home")
+    
     
       #get artist profile picture
 
@@ -262,21 +272,23 @@ async def artist(ctx, *, artist_query):
     #replace the </a with a blank space. 
     ab1 = str(re.sub(r"</a", "", ab))
 
-    if(avail == pattern):
+
+    #Put this up top once it works so you can have two thigns executing, if it inds an artist, and one if it doesnt.
+    if avail:
       #await ctx.channel.send("This artist doesnt exist.") 
       embed = discord.Embed(title=artistQ, description="D'Oh, no artist found. Please search again", color=0x00ffbf)
       imageURL = "https://data.whicdn.com/images/328319171/original.jpg" 
       embed.set_image(url=imageURL)
       await ctx.channel.send(embed=embed)
     else:
-      print("none")
-    
-    embed = discord.Embed(title=artistQ, description=Bio, color=0x00ffbf)
-    embed.add_field(name="Top Albums", value=ab1, inline=True)
-    imageURL = str(Artist_pic1)
-    embed.set_image(url=imageURL)
+      embed = discord.Embed(title=artistQ, description=Bio, color=0x00ffbf)
+      embed.add_field(name="Top Albums", value=ab1, inline=True)
+      imageURL = str(Artist_pic1)
+      embed.set_image(url=imageURL)
 
-    await ctx.channel.send(embed=embed)
+      await ctx.channel.send(embed=embed)
+    
+    
 
 
     #Testing out what values i get in  text value so i kno wwhat to look for 
