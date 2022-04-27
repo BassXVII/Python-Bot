@@ -237,23 +237,35 @@ async def artist(ctx, *, artist_query):
   # r"(Yee yee! We've found <strong>[0-9]{2,}<\/strong> artists matching <strong>[A-za-z0-9 -!.]{2,}<\/strong>)"
   
     #pattern = "We couldn't find any artists matching your query."
-    
-    
-    artistAvail = str(soup)
-    #print(artistAvail)
-    avail =  re.search(r"(Yee yee! We've found <strong>[0-9]{2,}<\/strong> artists matching <strong>[A-za-z0-9 -!.]{2,}<\/strong>)", artistAvail)
-    if avail:
-      print(avail)
-    else: 
-      print ("Go home")
-    
+ 
+   # f = open("Example.txt", "w")
+   # f.write(artistAvail)
+   # f.close()
+
+
+    noMatch = soup.findAll("h4")
+    artistAvail = str(noMatch)
+    #print(pic_Str)
+    p = str(re.findall(r"<h4>Yee yee! We've found <strong>[0-9,]{1,}<\/strong> lyrics, <strong>[0-9]{1,}</strong> artists, and <strong>[0-9]{1,}</strong> albums matching <strong>[0-9A-Za-z'\"']{2,}</strong>.</h4>", artistAvail))
+    print(p)
+
+
+   # regex = r"<h4>Yee yee! We've found <strong>[0-9,]{1,}<\/strong> lyrics, <strong>[0-9]{1,}</strong> artists, and <strong>[0-9]{1,}</strong> albums matching <strong>[0-9A-Za-z'\"']{2,}</strong>.</h4>"
+
+    #matches = re.search(regex, test_str)
+
+    if p:
+      print ("Match was found")
+    else:
+      print("Was not found")
+
     
       #get artist profile picture
 
     
     profile_pic = soup.findAll("img", class_="artist-thumb")
     pic_Str = str(profile_pic)
-    print(pic_Str)
+    #print(pic_Str)
     p = str(re.findall(r"(https.{1,})title", pic_Str))
     Artist_pic = re.sub(r'[\"([{})\]]', "", p)
     Artist_pic1 =  Artist_pic.strip('\'')
@@ -273,18 +285,23 @@ async def artist(ctx, *, artist_query):
     ab1 = str(re.sub(r"</a", "", ab))
 
 
-    #Put this up top once it works so you can have two thigns executing, if it inds an artist, and one if it doesnt.
-    if avail:
+    ################   THE FOLLOWING IF STATEMENT WAS FLIPPED TO GET ACTUAL RESULTS. MULTIPLE RESULTS STILL BRINGS NOTHING #############
+  
+
+    #Put this up top once it works so you can have two thigns executing, if it finds an artist, and one if it doesnt.
+    if p:
       #await ctx.channel.send("This artist doesnt exist.") 
-      embed = discord.Embed(title=artistQ, description="D'Oh, no artist found. Please search again", color=0x00ffbf)
-      imageURL = "https://data.whicdn.com/images/328319171/original.jpg" 
-      embed.set_image(url=imageURL)
-      await ctx.channel.send(embed=embed)
-    else:
+    
       embed = discord.Embed(title=artistQ, description=Bio, color=0x00ffbf)
       embed.add_field(name="Top Albums", value=ab1, inline=True)
       imageURL = str(Artist_pic1)
       embed.set_image(url=imageURL)
+      await ctx.channel.send(embed=embed)
+    else:
+      embed = discord.Embed(title=artistQ, description="D'Oh, no artist found. Please search again", color=0x00ffbf)
+      imageURL = "https://data.whicdn.com/images/328319171/original.jpg" 
+      embed.set_image(url=imageURL)
+      
 
       await ctx.channel.send(embed=embed)
     
