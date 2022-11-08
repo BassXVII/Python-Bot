@@ -72,7 +72,7 @@ async def on_message(message):
     #Help info
         if message.content.startswith("halp"):
             await message.channel.send(
-                "Current commands: \n .Info\n2.Purge\n3. .add\n4. .playList\n 5. SuggestedList\n 6. ver"
+                "Current commands:\n1. .Info\n2. .clear\n3. .add\n4. .list\n5. .rpsInfo\n6. ver\n7. .rps"
             )
 
         await bot.process_commands(message)
@@ -92,9 +92,11 @@ async def info(ctx):
 
 @bot.command()
 async def ver(ctx):
-    embed = discord.Embed(title="Current Version: ",
-                          description="4.20    |   011.08.22\n Source: https://github.com/BassXVII/Python-Bot",
-                          color=0x33FFFF)
+    embed = discord.Embed(
+        title="Current Version: ",
+        description=
+        "4.20    |   011.08.22\n Source: https://github.com/BassXVII/Python-Bot",
+        color=0x33FFFF)
     await ctx.channel.send(embed=embed)
 
 
@@ -261,10 +263,6 @@ async def list(ctx):
                           description=f.read(),
                           color=0x33FFFF)
     await ctx.channel.send(embed=embed)
-
-
-
-
 
 
 #------------------------------Artist Info----------------------------------------#
@@ -474,3 +472,9 @@ async def RT(ctx, *, movieSearch):
     ab1 = str(re.sub(r"</a", "", ab))
     with open("Album.txt", "w") as f:
         f.write(ab1)
+
+
+@bot.command()
+async def Purge(ctx, *, args):
+    await ctx.channel.purge(limit=args)
+    await ctx.channel.send("Snakey cleared away 30 messages")
