@@ -93,7 +93,7 @@ async def info(ctx):
 @bot.command()
 async def ver(ctx):
     embed = discord.Embed(title="Current Version: ",
-                          description="4.20    |   011.08.22",
+                          description="4.20    |   011.08.22\n Source: https://github.com/BassXVII/Python-Bot",
                           color=0x33FFFF)
     await ctx.channel.send(embed=embed)
 
@@ -252,6 +252,19 @@ async def add(ctx, *, args):
             f.write("\n")
             f.write("¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯")
             f.write("\n")
+
+
+@bot.command()
+async def list(ctx):
+    f = open("Suggested.txt", "r")
+    embed = discord.Embed(title="Songs Suggested: ",
+                          description=f.read(),
+                          color=0x33FFFF)
+    await ctx.channel.send(embed=embed)
+
+
+
+
 
 
 #------------------------------Artist Info----------------------------------------#
