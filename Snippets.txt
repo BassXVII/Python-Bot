@@ -259,3 +259,17 @@ async def movieQ(ctx, *, movieSearch):
     else:
       print("none")
       #get artist profile picture
+
+
+#pattern for determining if there is an artist by the users requested FileNotFoundError
+    
+  #Regex pattern for finding how many artsts there are:
+  # r"(Yee yee! We've found <strong>[0-9]{2,}<\/strong> artists matching <strong>[A-za-z0-9 -!.]{2,}<\/strong>)"
+  
+    #pattern = "We couldn't find any artists matching your query."
+ 
+   # f = open("Example.txt", "w")
+   # f.write(artistAvail)
+   # f.close()
+
+#matches = re.search(regex, test_str)

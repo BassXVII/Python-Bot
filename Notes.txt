@@ -7,4 +7,6 @@ Add a reaction to messages instead of replies
 Add a drop down list of possible commands when startign out a command with .
 
 
+Regex:
 
+ regex = r"<h4>Yee yee! We've found <strong>[0-9,]{1,}<\/strong> lyrics, <strong>[0-9]{1,}</strong> artists, and <strong>[0-9]{1,}</strong> albums matching <strong>[0-9A-Za-z'\"']{2,}</strong>.</h4>"

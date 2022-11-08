@@ -10,6 +10,7 @@ import urllib.parse
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 from pprint import PrettyPrinter
+import pandas as pd
 
 pp = PrettyPrinter()
 
@@ -39,6 +40,12 @@ sanitized_input = ["rock", "paper", "scissors", "lizard", "spock"]
 IP = "0.0.0.0"
 
 
+################################ DEFINITIONS ########################
+def Convert(string):
+    li = list(string.split(","))
+    return li
+
+
 @bot.event
 async def on_ready():
     print('We have logged in as {0.user}, Yippy ki Yay'.format(bot))
@@ -65,7 +72,7 @@ async def on_message(message):
     #Help info
         if message.content.startswith("halp"):
             await message.channel.send(
-                "Current commands: \n .Info\n2.Purge\n3. .add\n4. .playList\n 5. SuggestedList"
+                "Current commands: \n .Info\n2.Purge\n3. .add\n4. .playList\n 5. SuggestedList\n 6. ver"
             )
 
         await bot.process_commands(message)
@@ -75,13 +82,20 @@ async def on_message(message):
         logger.error(error)
 
 
-
 #Info command
 @bot.command()
 async def info(ctx):
     await ctx.channel.send(
         "Hi there, im Snakey. Im written in python. Im here to mainly keep track of songs we have played. For beginners, each command is case sensitive, and most require a .before them. IDk, im working on fixing that. Most of the commands you can figure out. Im getting kinda high :)"
     )
+
+
+@bot.command()
+async def ver(ctx):
+    embed = discord.Embed(title="Current Version: ",
+                          description="4.20    |   011.08.22",
+                          color=0x33FFFF)
+    await ctx.channel.send(embed=embed)
 
 
 #Rock paper scissors command
@@ -145,6 +159,8 @@ async def rps(ctx, *, args):
     #line = line.strip() + '  + 1\n'
     # temp.write(line.encode('utf-8'))
     #temp.close()
+
+
 # shutils.move('temp', 'membersList.txt')
 
 
@@ -216,9 +232,31 @@ async def pingmc(ctx, port):
     sock.close()
 
 
+#---------------------------------------------Various Song commands to add and display-----------------------------------------------#
+@bot.command()
+async def add(ctx, *, args):
+    msg_author = ctx.message.author
+    e = datetime.datetime.now()
+    date_now = ("%s/%s/%s" % (e.day, e.month, e.year))
+
+    await ctx.channel.send("Snakey added " + args +
+                           " to the suggested songs list :)")
+
+    with open("Suggested.txt", "a+") as f:
+        f.seek(0)
+        data = f.read(100)
+        if len(data) > 0:
+            f.write(
+                str(date_now) + ", " + str(args) + ", added by: " +
+                str(msg_author))
+            f.write("\n")
+            f.write("¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯")
+            f.write("\n")
+
 
 #------------------------------Artist Info----------------------------------------#
 #, "https://www.lyrics.com/sub-artist/"
+
 
 @bot.command()
 async def artist(ctx, *, artist_query):
@@ -227,102 +265,98 @@ async def artist(ctx, *, artist_query):
     artistQ = artist_query
     #print("Full url: https://www.lyrics.com/" + artist_query)
     page = requests.get("https://www.lyrics.com/artist/" + artistQ)
-    #print(page.status_code)
+
     soup = BeautifulSoup(page.content, 'html.parser')
 
-
-    #pattern for determining if there is an artist by the users requested FileNotFoundError
-    
-  #Regex pattern for finding how many artsts there are:
-  # r"(Yee yee! We've found <strong>[0-9]{2,}<\/strong> artists matching <strong>[A-za-z0-9 -!.]{2,}<\/strong>)"
-  
-    #pattern = "We couldn't find any artists matching your query."
- 
-   # f = open("Example.txt", "w")
-   # f.write(artistAvail)
-   # f.close()
-
+    f = open("Table.txt", "w")
 
     noMatch = soup.findAll("h4")
     artistAvail = str(noMatch)
     #print(pic_Str)
-    p = str(re.findall(r"<h4>Yee yee! We've found <strong>[0-9,]{1,}<\/strong> lyrics, <strong>[0-9]{1,}</strong> artists, and <strong>[0-9]{1,}</strong> albums matching <strong>[0-9A-Za-z'\"']{2,}</strong>.</h4>", artistAvail))
-    print(p)
+    p = str(
+        re.findall(
+            r"<h4>Yee yee! We've found <strong>[0-9,]{1,}<\/strong> lyrics, <strong>[0-9]{1,}</strong> artists, and <strong>[0-9]{1,}</strong> albums matching <strong>[0-9A-Za-z'\"']{2,}</strong>.</h4>",
+            artistAvail))
 
+    # GET LIST OF ALTERNATIVE NAMES #
 
-   # regex = r"<h4>Yee yee! We've found <strong>[0-9,]{1,}<\/strong> lyrics, <strong>[0-9]{1,}</strong> artists, and <strong>[0-9]{1,}</strong> albums matching <strong>[0-9A-Za-z'\"']{2,}</strong>.</h4>"
+    randArtist = soup.findAll("a", class_="name")
+    randArtStr = str(randArtist)
+    L = str(
+        re.findall(r"(artist/[a-zA-Z0-9. '\"-/]{2,}/[0-9]{5,9})", randArtStr))
 
-    #matches = re.search(regex, test_str)
+    f = open("Table.txt", "w")
+    for i in L:
+        f.write(L)
+    f.close()
 
-    if p:
-      print ("Match was found")
+    # Determine if artist has been found or is in a table of artists
+    if not p:
+        print("Match was found")
     else:
-      print("Was not found")
+        print("Was not found")
 
-    
-      #get artist profile picture
+        #get artist profile picture
 
-    
     profile_pic = soup.findAll("img", class_="artist-thumb")
     pic_Str = str(profile_pic)
     #print(pic_Str)
     p = str(re.findall(r"(https.{1,})title", pic_Str))
     Artist_pic = re.sub(r'[\"([{})\]]', "", p)
-    Artist_pic1 =  Artist_pic.strip('\'')
-    
+    Artist_pic1 = Artist_pic.strip('\'')
 
     #-------------------------------Get info about artist---------------------------------------#
-    head = soup.findAll("p",  class_="artist-bio")
+    head = soup.findAll("p", class_="artist-bio")
     Artist_bio = str(head)
-    b = str(re.findall(r">(.{1,})<",  Artist_bio, flags= re.S)) # re.S flag for newline spaces i believe.
+    b = str(re.findall(r">(.{1,})<", Artist_bio,
+                       flags=re.S))  # re.S flag for newline spaces i believe.
     Bio = re.sub(r"[\'([{})'\]]", " ", b)
 
-    artist_Album = soup.findAll("h3",limit=6,  class_="artist-album-label")
-    album_list= str(artist_Album)
-    ab = str(re.findall(r"([\’\'!.,\(\)A-Z a-z0-9\w\-\:\+\%\[\]\+\/\;\&]{2,}</a)", album_list))
-    
-    #replace the </a with a blank space. 
+    artist_Album = soup.findAll("h3", limit=6, class_="artist-album-label")
+    album_list = str(artist_Album)
+    ab = str(
+        re.findall(r"([\’\'!.,\(\)A-Z a-z0-9\w\-\:\+\%\[\]\+\/\;\&]{2,}</a)",
+                   album_list))
+
+    #replace the </a with a blank space.
     ab1 = str(re.sub(r"</a", "", ab))
 
-
     ################   THE FOLLOWING IF STATEMENT WAS FLIPPED TO GET ACTUAL RESULTS. MULTIPLE RESULTS STILL BRINGS NOTHING #############
-  
 
     #Put this up top once it works so you can have two thigns executing, if it finds an artist, and one if it doesnt.
     if p:
-      #await ctx.channel.send("This artist doesnt exist.") 
-    
-      embed = discord.Embed(title=artistQ, description=Bio, color=0x00ffbf)
-      embed.add_field(name="Top Albums", value=ab1, inline=True)
-      imageURL = str(Artist_pic1)
-      embed.set_image(url=imageURL)
-      await ctx.channel.send(embed=embed)
+        #await ctx.channel.send("This artist doesnt exist.")
+
+        embed = discord.Embed(title=artistQ, description=Bio, color=0x00ffbf)
+        embed.add_field(name="Top Albums", value=ab1, inline=True)
+        imageURL = str(Artist_pic1)
+        embed.set_image(url=imageURL)
+        await ctx.channel.send(embed=embed)
     else:
-      embed = discord.Embed(title=artistQ, description="D'Oh, no artist found. Please search again", color=0x00ffbf)
-      imageURL = "https://data.whicdn.com/images/328319171/original.jpg" 
-      embed.set_image(url=imageURL)
-      
+        embed = discord.Embed(
+            title=artistQ,
+            description="D'Oh, no artist found. Please search again",
+            color=0x00ffbf)
+        imageURL = "https://data.whicdn.com/images/328319171/original.jpg"
+        embed.set_image(url=imageURL)
 
-      await ctx.channel.send(embed=embed)
-    
-    
+        await ctx.channel.send(embed=embed)
 
-
-    #Testing out what values i get in  text value so i kno wwhat to look for 
+    #Testing out what values i get in  text value so i know what to look for
     #with open("Example.txt", "w") as f:
-        #f.write(Bio + "\n")
-       # f.write(Artist_pic1)
-
+    #f.write(Bio + "\n")
+    # f.write(Artist_pic1)
 
     #--------------------------------get artist int value for query--------------------------------#
-  #<h3><a href="artist/Eminem/347307">Famous lyrics by&nbsp;&raquo;</a></h3></hgroup>
+#<h3><a href="artist/Eminem/347307">Famous lyrics by&nbsp;&raquo;</a></h3></hgroup>
     artistVal = soup.findAll("h1", class_="artist")
     artistNum = str(artistVal)
     n = str(re.findall(r'(/[0-9]*)\"', artistNum))
-    
+
     Anum1 = str(re.sub(r"[^0-9]*", "", n))
     #print("Anum: " + Anum1)
     #ANum = str(re.findall(r'([0-9]{6})', Anum1))
+
 
 #---------------------------get artist albums-------------------------------#
 @bot.command()
@@ -333,27 +367,27 @@ async def album(ctx, *, artist_query):
     #print(page.status_code)
     soup = BeautifulSoup(page.content, 'html.parser')
 
+    artist_Album = soup.findAll("h3", limit=30, class_="artist-album-label")
+    album_list = str(artist_Album)
+    ab = str(
+        re.findall(r"([\’\'!.,\(\)A-Z a-z0-9\w\-\:\+\%\[\]\+\/\;\&]{2,}</a)",
+                   album_list))
 
-    artist_Album = soup.findAll("h3",limit=30,  class_="artist-album-label")
-    album_list= str(artist_Album)
-    ab = str(re.findall(r"([\’\'!.,\(\)A-Z a-z0-9\w\-\:\+\%\[\]\+\/\;\&]{2,}</a)", album_list))
-    
-    #replace the </a with a blank space. 
+    #replace the </a with a blank space.
     ab1 = str(re.sub(r"</a", "", ab))
     with open("Album.txt", "w") as f:
-      f.write(ab1)
+        f.write(ab1)
 
     #Write full html for certain album for regex testing purposes
-      #f.write(album_list) 
+    #f.write(album_list)
     f.close()
 
-  
-    embed = discord.Embed(title=(artist_query + "Top 3 albums"), description=ab1, color=0x00ffbf)
-
+    embed = discord.Embed(title=(artist_query + "Top 3 albums"),
+                          description=ab1,
+                          color=0x00ffbf)
 
     await ctx.channel.send(embed=embed)
     #Send embedded message in chat
-
 
 
 #----------------------get lyrics for requested song---------------------------#
@@ -361,33 +395,33 @@ async def album(ctx, *, artist_query):
 async def lyrics(ctx, *, song):
 
     #int_Value = int(numQuery)
-  songQ = song
-  page = requests.get("https://www.azlyrics.com/lyrics/kodakblack" + songQ + ".html")
+    songQ = song
+    page = requests.get("https://www.azlyrics.com/lyrics/kodakblack" + songQ +
+                        ".html")
     #print(page.status_code)
-  soup = BeautifulSoup(page.content, 'html.parser')
+    soup = BeautifulSoup(page.content, 'html.parser')
 
-  with open("output.html", "w", encoding = 'utf-8') as file:
-    # prettify the soup object and convert it into a string  
-    file.write(str(soup.prettify()))
+    with open("output.html", "w", encoding='utf-8') as file:
+        # prettify the soup object and convert it into a string
+        file.write(str(soup.prettify()))
 
 
-  
-  
 #f.close()
+
 
 @bot.command()
 async def test_arg(ctx, *args):
-  page = requests.get("https://www.azlyrics.com/lyrics/" + args[0] + "/" + args[1] + ".html")
+    page = requests.get("https://www.azlyrics.com/lyrics/" + args[0] + "/" +
+                        args[1] + ".html")
     #print(page.status_code)
-  soup = BeautifulSoup(page.content, 'html.parser')
-  print(soup)
- 
-  info = str(page)
-  with open("Album.txt", "w") as f:
-    f.write(info)
-    
+    soup = BeautifulSoup(page.content, 'html.parser')
+    print(soup)
 
-    
+    info = str(page)
+    with open("Album.txt", "w") as f:
+        f.write(info)
+
+
 bot.load_extension("cogs.ping")
 bot.load_extension("cogs.Purge")
 bot.load_extension("cogs.phrases")
@@ -396,18 +430,34 @@ bot.load_extension("cogs.rpsInfo")
 keep_alive()
 bot.run(os.getenv('TOKEN'))
 
-
 #https://stackoverflow.com/questions/41334058/soup-findall-return-null-for-div-class-attribute-beautifulsoup
 
-
-
 #page = requests.get("https://www.lyrics.com/sub-artist/" +artistQ)
-      #soup = BeautifulSoup(page.content, 'lxml')
-      #print(page)
-      #head = soup.findAll("p",  class_="artist-bio")
-      #b = str(re.findall(r">(.{1,})<", Artist_bio))
-      #Bio = re.sub(r"[\'([{})'\]]", " ", b)
-
+#soup = BeautifulSoup(page.content, 'lxml')
+#print(page)
+#head = soup.findAll("p",  class_="artist-bio")
+#b = str(re.findall(r">(.{1,})<", Artist_bio))
+#Bio = re.sub(r"[\'([{})'\]]", " ", b)
 
 # page = requests.get("https://www.lyrics.com/sub-artist/" +artistQ)
-     # print(page)
+# print(page)
+
+
+@bot.command()
+async def RT(ctx, *, movieSearch):
+
+    artistQ = artist_query
+    page = requests.get("https://www.lyrics.com/artist/" + artistQ)
+    #print(page.status_code)
+    soup = BeautifulSoup(page.content, 'html.parser')
+
+    artist_Album = soup.findAll("h3", limit=30, class_="artist-album-label")
+    album_list = str(artist_Album)
+    ab = str(
+        re.findall(r"([\’\'!.,\(\)A-Z a-z0-9\w\-\:\+\%\[\]\+\/\;\&]{2,}</a)",
+                   album_list))
+
+    #replace the </a with a blank space.
+    ab1 = str(re.sub(r"</a", "", ab))
+    with open("Album.txt", "w") as f:
+        f.write(ab1)
