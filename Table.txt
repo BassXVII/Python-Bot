@@ -1,5 +1,0 @@
-13/10/2021, Song1, added by: pickle_Rick#0956
-¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
-
-
-https://discord.com/api/oauth2/authorize?client_id=819659006268276796&permissions=8&scope=bot%20applications.commands
